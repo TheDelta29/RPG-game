@@ -146,6 +146,15 @@ enemies = [
         "gold_reward": 10
     },
     {
+        "name": " Big Slime",
+        "hp": 50,
+        "max_hp": 50,
+        "attack": 13,
+        "defense": 3,
+        "inventory": [],
+        "gold_reward": 30
+    },
+    {
         "name": "Goblin",
         "hp": 45,
         "max_hp": 45,
