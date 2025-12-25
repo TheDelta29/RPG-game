@@ -127,12 +127,12 @@ shop_items = [
     {"name": "Amulet of Withering", "rarity": "evil", "attack": 0, "defense": -4, "max_hp": 80, "price": 450},
 
     # ===== VOIDLESS =====
-    {"name": "Voidless Edge", "rarity": "voidless", "attack": 40, "defense": -10, "max_hp": 0, "price": 9000},
-    {"name": "Spear of Null Horizons", "rarity": "voidless", "attack": 35, "defense": 20, "max_hp": 0, "price": 9000},
-    {"name": "Armor of the Empty King", "rarity": "voidless", "attack": 0, "defense": 35, "max_hp": 120, "price": 9000},
-    {"name": "Shield of Unmade Light", "rarity": "voidless", "attack": 0, "defense": 32, "max_hp": 0, "price": 9000},
-    {"name": "Boots of Silent Infinity", "rarity": "voidless", "attack": 0, "defense": 20, "max_hp": 0, "price": 9000},
-    {"name": "Heart of the Voidless", "rarity": "voidless", "attack": 0, "defense": 12, "max_hp": 200, "price": 9000},
+    {"name": "Voidless Edge", "rarity": "voidless", "attack": 40, "defense": -10, "max_hp": 0, "price": 9500},
+    {"name": "Spear of Null Horizons", "rarity": "voidless", "attack": 35, "defense": 20, "max_hp": 0, "price": 9500},
+    {"name": "Armor of the Empty King", "rarity": "voidless", "attack": 0, "defense": 35, "max_hp": 120, "price": 9500},
+    {"name": "Shield of Unmade Light", "rarity": "voidless", "attack": 0, "defense": 32, "max_hp": 0, "price": 9500},
+    {"name": "Boots of Silent Infinity", "rarity": "voidless", "attack": 0, "defense": 20, "max_hp": 0, "price": 9500},
+    {"name": "Heart of the Voidless", "rarity": "voidless", "attack": 0, "defense": 12, "max_hp": 200, "price": 9500},
 ]
 
 enemies = [
