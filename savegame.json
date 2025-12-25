@@ -1,0 +1,102 @@
+{
+  "day": 14,
+  "party": [
+    {
+      "name": "Aria",
+      "hp": 100,
+      "max_hp": 100,
+      "attack": 150,
+      "defense": 65,
+      "gold": 40906,
+      "inventory": [
+        "elixir",
+        "potion",
+        "potion",
+        "potion",
+        "potion",
+        "potion",
+        "potion",
+        "potion",
+        "potion",
+        "potion",
+        "potion"
+      ],
+      "equipment": [
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Iron Sword",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Leather Armor",
+        "Iron Sword"
+      ]
+    },
+    {
+      "name": "Borin",
+      "hp": 64,
+      "max_hp": 80,
+      "attack": 25,
+      "defense": 2,
+      "gold": 44,
+      "inventory": [
+        "potion",
+        "bomb"
+      ],
+      "equipment": [
+        "Iron Sword"
+      ]
+    },
+    {
+      "name": "Cyra",
+      "hp": 53,
+      "max_hp": 60,
+      "attack": 10,
+      "defense": 11,
+      "gold": 37,
+      "inventory": [],
+      "equipment": [
+        "Leather Armor"
+      ]
+    }
+  ]
+}
