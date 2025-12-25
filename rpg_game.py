@@ -146,7 +146,7 @@ enemies = [
         "gold_reward": 10
     },
     {
-        "name": " Big Slime",
+        "name": "Big Slime",
         "hp": 50,
         "max_hp": 50,
         "attack": 13,
