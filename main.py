@@ -366,7 +366,41 @@ def rest_at_campfire(party):
             pause()
 
 def rarity_weight(day):
-    return
+    starting_day = 1
+    end_game = 100
+    t = (day - starting_day) / (end_game - starting_day)
+    t = max(0.0 , min(1.0, t))
+    start = {
+        "common": 80,
+        "uncommon": 15,
+        "rare": 5,
+        "epic": 2,
+        "legendary": 1,
+        "mythic": 0.1,
+        "evil": 0.05,
+        "voidless": 0.01,
+    }
+
+    end = {
+        "common": 0.01,
+        "uncommon": 0.05,
+        "rare": 0.1,
+        "epic": 1,
+        "legendary": 2,
+        "mythic": 5,
+        "evil": 15,
+        "voidless": 80,
+    }
+
+    weights ={}
+
+    for rarity in start:
+        a = start[rarity]
+        b = end[rarity]
+        w = a + (b - a) * t
+        weights[rarity] = w
+
+    return weights
 
 def visit_village(party):
 
@@ -520,3 +554,7 @@ def load_game():
     except FileNotFoundError:
         print("No save file found. Starting a new game.")
         return None, None
+
+
+if __name__ == "__main__":
+    main()
