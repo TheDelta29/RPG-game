@@ -402,7 +402,19 @@ def rarity_weight(day):
 
     return weights
 
-def visit_village(party):
+def visit_village(party, day):
+
+    weights_dict = rarity_weight(day)
+    rarities = ["common", "uncommon", "rare", "epic", "legendary", "mythic", "evil", "voidless"]
+    weights = [weights_dict[r] for r in rarities]
+    slots = 3
+    rolled_rarities = random.choices(rarities, weights=weights, k=slots)
+    todays_loot = []
+    for r in rolled_rarities:
+        loot =  [item for item in shop_items if item["rarity"] == r]
+        choice = random.choice(loot)
+        todays_loot.append(choice)
+
 
     print("Choose a buyer:")
     while True:
@@ -426,45 +438,72 @@ def visit_village(party):
         buyer = party[idx]
 
         while True:
+
             print("=" * 60)
             print(f"Hello {buyer['name']}, you have entered Dino's Tavern, what would you like?")
             print(f"Total gold for this player -> {buyer['gold']} gold")
-            print("1) Iron Sword (50g, +5 attack)")
-            print("2) Leather Armor (40g , +3 defense)")
-            print("3) Change buyer")
-            print("4) Return to menu")
-            choice = input("Enter your choice: ")
-            if choice == "1":
-                if buyer["gold"] >= ironsword[0]["price"]:
-                    buyer["gold"] -= ironsword[0]["price"]
-                    buyer['equipment'].append("Iron Sword")
-                    buyer['attack'] += ironsword[0]['attack']
-                    price = ironsword[0]["price"]
-                    print(f"{buyer['name']} has bought an Iron Sword for {price} gold !")
-                    print(f"{buyer['name']} now has {buyer['gold']} gold !")
-                    pause()
+
+
+            for x in range(len(todays_loot)):
+                item = todays_loot[x]
+
+                parts= []
+                if item["attack"] != 0:
+                    parts.append(f"+{item['attack']} atk")
+                if item["defense"] != 0:
+                    parts.append(f"+{item['defense']} def")
+                if item["max_hp"] != 0:
+                    parts.append(f"+{item['max_hp']} hp")
+
+                stats_text = ", ".join(parts)
+
+                if stats_text:
+                    print(f"{x + 1}) {item['name']} ({item['price']} gold [{stats_text}])")
                 else:
-                    print("Sorry, you don't have enough gold")
-                    pause()
-            elif choice == "2":
-                if buyer["gold"] >= leatherarmor[0]["price"]:
-                    buyer["gold"] -= leatherarmor[0]["price"]
-                    buyer['equipment'].append("Leather Armor")
-                    buyer['defense'] += leatherarmor[0]['defense']
-                    price= leatherarmor[0]['price']
-                    print(f"{buyer['name']} has bought an Leather Armor for {price} gold !")
-                    print(f"{buyer['name']} now has {buyer['gold']} gold !")
-                    pause()
-                else:
-                    print("Sorry, you don't have enough gold")
-                    pause()
-            elif choice == "3":
+                    print(f"{x + 1}) {item['name']} ({item['price']} gold)")
+
+
+            print("c) Change buyer")
+            print("m) Return to menu")
+            choice = input("Enter your choice, or (c) change buyer, (m) to return to menu: ").strip().lower()
+
+            if choice == "c":
                 break
-            elif choice == "4":
+
+            if choice == "m":
                 print("Thank you for visiting")
                 return
-            else:
+
+            if not choice.isdigit():
                 print("Invalid choice!")
+                pause()
+                continue
+
+            idx = int(choice) - 1
+            if idx < 0 or idx >= len(todays_loot):
+                print("That item number doesnt exist")
+                pause()
+                continue
+
+            item = todays_loot[idx]
+
+            if buyer["gold"] < item["price"]:
+                print("Sorry, you don't have enough gold")
+                pause()
+                continue
+            if item["name"] in buyer["equipment"]:
+                print("You already own this item!")
+                pause()
+                continue
+            buyer["gold"] -= item["price"]
+            buyer["equipment"].append(item["name"])
+            buyer['attack'] += item['attack']
+            buyer['defense'] += item['defense']
+            buyer['max_hp'] += item['max_hp']
+            print(f"{buyer['name']} has bought a(n) {item['name']} for {item['price']} gold !")
+            print(f"{buyer['name']} now has {buyer['gold']} gold !")
+            pause()
+
 
 def main():
 
@@ -516,7 +555,7 @@ def main():
             rest_at_campfire(party)
             day += 1
         elif choice == "3":
-            visit_village(party)
+            visit_village(party, day)
             day += 1
         elif choice == "4":
             save_game(day, party)
