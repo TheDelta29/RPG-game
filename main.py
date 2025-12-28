@@ -13,8 +13,12 @@ player1 = {
     "attack": 15,
     "defense": 5,
     "gold": 20,
-    "inventory": ["potion", "potion", "elixir"],
-    "equipment": []
+    "inventory":
+        {
+            "potion" : 2,
+            "elixir": 1
+        },
+    "equipment": {}
 }
 
 player2 = {
@@ -24,8 +28,12 @@ player2 = {
     "attack": 20,
     "defense": 2,
     "gold": 15,
-    "inventory": ["potion", "bomb"],
-    "equipment": []
+    "inventory":
+        {
+            "potion" : 1,
+            "bomb" : 1
+         },
+    "equipment": {}
 }
 
 player3 = {
@@ -35,8 +43,8 @@ player3 = {
     "attack": 10,
     "defense": 8,
     "gold": 15,
-    "inventory": [],
-    "equipment": []
+    "inventory": {},
+    "equipment": {}
 }
 
 party = [player1, player2, player3]
@@ -491,12 +499,10 @@ def visit_village(party, day):
                 print("Sorry, you don't have enough gold")
                 pause()
                 continue
-            if item["name"] in buyer["equipment"]:
-                print("You already own this item!")
-                pause()
-                continue
+
             buyer["gold"] -= item["price"]
-            buyer["equipment"].append(item["name"])
+            name = item["name"]
+            buyer["equipment"][name] = buyer['equipment'].get(name, 0) + 1
             buyer['attack'] += item['attack']
             buyer['defense'] += item['defense']
             buyer['max_hp'] += item['max_hp']
@@ -544,8 +550,9 @@ def main():
         print("1) Battle")
         print("2) Rest at the Campfire")
         print("3) Visit Village")
-        print("4) Save & Quit")
-        print("5) Quit without saving")
+        print("4) Check a player's stat page")
+        print("5) Save & Quit")
+        print("6) Quit without saving")
         choice = input("Enter your choice: ")
         if choice == "1":
             enemy = choose_random_enemy()
@@ -558,10 +565,35 @@ def main():
             visit_village(party, day)
             day += 1
         elif choice == "4":
+            print("Choose a player:")
+            for i, player in enumerate(party, start=1):
+                print(f"{i}) {player['name']}")
+            choice = input("Enter player number: ")
+            idx = int(choice) - 1
+            if idx < 0 or idx >= len(party):
+                print("Invalid player.")
+                continue
+            player = party[idx]
+            print("=" * 60)
+            print(f"{player['name']} : ", player["hp"],'/',player["max_hp"], "HP")
+            print(f"Attack : {player["attack"]}")
+            print(f"Defense : {player["defense"]}")
+            print(f"Gold : {player['gold']}")
+            print("=" * 60)
+            pause()
+            choice2 = input("Would you like to see the equipments of this player? (y/n) :")
+            if choice2 == "y":
+                for item, count in player["equipment"].items():
+                    print(f"{item} x{count}")
+                    pause()
+            else :
+                return
+
+        elif choice == "5":
             save_game(day, party)
             print("Thank you for playing!")
             break
-        elif choice == "5":
+        elif choice == "6":
             sure = input("Are you sure you want to quit without saving? (y/n) : ")
             if sure == "y":
                 print("Thank you for playing!")
@@ -593,7 +625,6 @@ def load_game():
     except FileNotFoundError:
         print("No save file found. Starting a new game.")
         return None, None
-
 
 if __name__ == "__main__":
     main()
