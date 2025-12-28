@@ -18,7 +18,10 @@ player1 = {
             "potion" : 2,
             "elixir": 1
         },
-    "equipment": {}
+    "equipment": {},
+    "level": 1,
+    "xp": 0,
+    "stat_points" : 3
 }
 
 player2 = {
@@ -33,7 +36,10 @@ player2 = {
             "potion" : 1,
             "bomb" : 1
          },
-    "equipment": {}
+    "equipment": {},
+    "level": 1,
+    "xp": 0,
+    "stat_points" : 3
 }
 
 player3 = {
@@ -44,26 +50,13 @@ player3 = {
     "defense": 8,
     "gold": 15,
     "inventory": {},
-    "equipment": {}
+    "equipment": {},
+    "level": 1,
+    "xp": 0,
+    "stat_points" : 3
 }
 
 party = [player1, player2, player3]
-
-ironsword = [
-    {
-        "name": "Iron Sword",
-        "attack": 5,
-        "price": 50,
-    }
-]
-
-leatherarmor = [
-    {
-        "name": "Leather Armor",
-        "defense": 3,
-        "price": 40,
-    }
-]
 
 shop_items = [
     # ===== COMMON =====
@@ -151,7 +144,8 @@ enemies = [
         "attack": 8,
         "defense": 1,
         "inventory": [],
-        "gold_reward": 10
+        "gold_reward": 10,
+        "xp_reward": 45
     },
     {
         "name": "Big Slime",
@@ -160,7 +154,8 @@ enemies = [
         "attack": 13,
         "defense": 3,
         "inventory": [],
-        "gold_reward": 30
+        "gold_reward": 30,
+        "xp_reward": 90
     },
     {
         "name": "Goblin",
@@ -169,7 +164,8 @@ enemies = [
         "attack": 12,
         "defense": 3,
         "inventory": [],
-        "gold_reward": 20
+        "gold_reward": 20,
+        "xp_reward": 75
     },
     {
         "name": "Orc",
@@ -178,7 +174,8 @@ enemies = [
         "attack": 18,
         "defense": 5,
         "inventory": [],
-        "gold_reward": 35
+        "gold_reward": 35,
+        "xp_reward": 150
     },
 ]
 
@@ -317,6 +314,14 @@ def pause():
     next = input("")
     return next
 
+def check_level_up(player):
+    while player["xp"] >= xp_to_level(player["level"]):
+        player["level"] += 1
+        player["xp"] -= xp_to_level(player["level"])
+        player["max_hp"] += 5
+        player["stat_points"] += 3
+        print(f"{player['name']} has leveled up to Lv. {player['level']}!")
+    return player
 
 def give_loot(party, enemy):
     if enemy['hp'] <= 0:
@@ -327,6 +332,8 @@ def give_loot(party, enemy):
             gold_reward = enemy.get("gold_reward", 0)
             gold_per_player = gold_reward // len(alive_party)
 
+            xp_reward = enemy.get("xp_reward", 0)
+
             # # give a potion to the first party member that is still alive
             # first_alive = alive_party[0]
             # first_alive["inventory"].append("potion")
@@ -336,6 +343,9 @@ def give_loot(party, enemy):
             for player in alive_party:
                 player["gold"] += gold_per_player
                 print(f"{player['name']} received {gold_per_player} gold !")
+                player["xp"] += xp_reward
+                print(f"{player['name']} received {xp_reward} xp !")
+                check_level_up(player)
                 pause()
             print(f"Total party gold : {sum(player["gold"] for player in party)}")
             return True
@@ -372,6 +382,41 @@ def rest_at_campfire(party):
             print(f"{player['name']} : ", player["hp"],'/', player["max_hp"], "HP")
             print("=" * 60)
             pause()
+
+
+def xp_to_level(level):
+    return 50 * level * level
+
+def spend_stat_points(player):
+    print("You can spend your stat points to upgrade your character :")
+    print(f"Max HP : {player["max_hp"]}")
+    print(f"Attack : {player["attack"]}")
+    print(f"Defense : {player['defense']}")
+    choice = input("Enter the number of stat points you want to spend (or q to quit) : ").strip()
+    if choice == "q":
+        return player
+    if choice.isdigit():
+        if int(choice) > player["stat_points"]:
+            print("You don't have enough stat points!")
+        else:
+            player["stat_points"] -= int(choice)
+            print("1) Max HP")
+            print("2) Attack")
+            print("3) Defense")
+            choice2 = input("What do you want to spend them on ? ")
+            if choice2 == "1":
+                player["max_hp"] += int(choice)
+                player["hp"] += int(choice)
+                print("You have increased your max health by :", choice)
+            elif choice2 == "2":
+                player["attack"] += int(choice)
+                print("You have increased your attack by :", choice)
+            elif choice2 == "3":
+                player["defense"] += int(choice)
+                print("You have increased your defense by :", choice)
+            else:
+                print("Invalid choice!")
+
 
 def rarity_weight(day):
     starting_day = 1
@@ -575,19 +620,24 @@ def main():
                 continue
             player = party[idx]
             print("=" * 60)
+            print(f"Level : {player['level']}")
+            print(f"Available Stat Points : {player['stat_points']}")
             print(f"{player['name']} : ", player["hp"],'/',player["max_hp"], "HP")
             print(f"Attack : {player["attack"]}")
             print(f"Defense : {player["defense"]}")
             print(f"Gold : {player['gold']}")
             print("=" * 60)
+            print("=" * 23, "- Equipments -", "=" * 23)
+            for item, count in player["equipment"].items():
+                print(f"{item} x{count}")
             pause()
-            choice2 = input("Would you like to see the equipments of this player? (y/n) :")
-            if choice2 == "y":
-                for item, count in player["equipment"].items():
-                    print(f"{item} x{count}")
+            if player["stat_points"] > 0:
+                choice2 = input("Would you like to spend your stat points ? (y/n) :")
+                if choice2 == "y":
+                    spend_stat_points(player)
                     pause()
             else :
-                return
+                continue
 
         elif choice == "5":
             save_game(day, party)
