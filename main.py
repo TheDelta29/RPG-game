@@ -12,6 +12,11 @@ player1 = {
     "max_hp": 100,
     "attack": 15,
     "defense": 5,
+    "vigor": 20,
+    "strength": 10,
+    "agility": 13,
+    "intelligence": 10,
+    "wisdom": 5,
     "gold": 20,
     "inventory":
         {
@@ -30,6 +35,11 @@ player2 = {
     "max_hp": 80,
     "attack": 20,
     "defense": 2,
+    "vigor": 16,
+    "strength": 15,
+    "agility": 5,
+    "intelligence": 8,
+    "wisdom": 6,
     "gold": 15,
     "inventory":
         {
@@ -48,6 +58,11 @@ player3 = {
     "max_hp": 60,
     "attack": 10,
     "defense": 8,
+    "vigor": 10,
+    "strength": 7,
+    "agility": 8,
+    "intelligence": 13,
+    "wisdom": 10,
     "gold": 15,
     "inventory": {},
     "equipment": {},
@@ -143,6 +158,11 @@ enemies = [
         "max_hp": 30,
         "attack": 8,
         "defense": 1,
+        "vigor": 6,
+        "strength": 5,
+        "agility": 4,
+        "intelligence": 4,
+        "wisdom": 5,
         "inventory": [],
         "gold_reward": 10,
         "xp_reward": 45
@@ -153,6 +173,11 @@ enemies = [
         "max_hp": 50,
         "attack": 13,
         "defense": 3,
+        "vigor": 10,
+        "strength": 8,
+        "agility": 6,
+        "intelligence": 5,
+        "wisdom": 3,
         "inventory": [],
         "gold_reward": 30,
         "xp_reward": 90
@@ -163,6 +188,11 @@ enemies = [
         "max_hp": 45,
         "attack": 12,
         "defense": 3,
+        "vigor": 9,
+        "strength": 8,
+        "agility": 4,
+        "intelligence": 7,
+        "wisdom": 5,
         "inventory": [],
         "gold_reward": 20,
         "xp_reward": 75
@@ -173,6 +203,11 @@ enemies = [
         "max_hp": 70,
         "attack": 18,
         "defense": 5,
+        "vigor": 14,
+        "strength": 14,
+        "agility": 8,
+        "intelligence": 3,
+        "wisdom": 5,
         "inventory": [],
         "gold_reward": 35,
         "xp_reward": 150
@@ -184,7 +219,7 @@ enemies = [
 ## ============================================================================
 
 def calculate_damage(attacker, defender):
-    base_damage = attacker["attack"] - defender["defense"]
+    base_damage = attacker["attack"] * (1 + (attacker["strength"] / 25 )) - defender["defense"]
     if base_damage <= 0:
         base_damage = 0
     return base_damage
@@ -385,7 +420,7 @@ def rest_at_campfire(party):
 
 
 def xp_to_level(level):
-    return 50 * level * level
+    return 50 * level
 
 def spend_stat_points(player):
     print("You can spend your stat points to upgrade your character :")
