@@ -18,6 +18,8 @@ player1 = {
     "intelligence": 10,
     "wisdom": 5,
     "gold": 20,
+    "mana": 100,
+    "max_mana": 100,
     "inventory":
         {
             "potion" : 2,
@@ -41,6 +43,8 @@ player2 = {
     "intelligence": 8,
     "wisdom": 6,
     "gold": 15,
+    "mana": 80,
+    "max_mana": 80,
     "inventory":
         {
             "potion" : 1,
@@ -64,6 +68,8 @@ player3 = {
     "intelligence": 13,
     "wisdom": 10,
     "gold": 15,
+    "mana": 130,
+    "max_mana": 130,
     "inventory": {},
     "equipment": {},
     "level": 1,
@@ -151,6 +157,21 @@ shop_items = [
     {"name": "Heart of the Voidless", "rarity": "voidless", "attack": 0, "defense": 12, "max_hp": 200, "price": 9500},
 ]
 
+spells = [
+    {
+        "name": "Fireball",
+        "damage": 45,
+        "mana_cost": 50,
+    },
+
+    {
+        "name": "Icequake",
+        "damage": 30,
+        "mana_cost": 35,
+    },
+
+]
+
 enemies = [
     {
         "name": "Slime",
@@ -219,7 +240,7 @@ enemies = [
 ## ============================================================================
 
 def calculate_damage(attacker, defender):
-    base_damage = attacker["attack"] * (1 + (attacker["strength"] / 25 )) - defender["defense"]
+    base_damage = attacker["attack"] * (1 + (attacker.get("strength", 0) / 25 )) - defender["defense"]
     if base_damage <= 0:
         base_damage = 0
     return base_damage
@@ -387,9 +408,15 @@ def give_loot(party, enemy):
     else :
         return False
 
-def choose_random_enemy():
+def choose_random_enemy(day):
     rand = random.choice(enemies)
     enemy=copy.deepcopy(rand)
+    enemy["hp"] = enemy["hp"] * (1.01 * day)
+    enemy["max_hp"] = enemy["max_hp"] * (1.01 * day)
+    enemy["attack"] = enemy["attack"] * (1.01 * day)
+    enemy["defense"] = enemy["defense"] * (1.01 * day)
+    enemy["gold_reward"] = enemy["gold_reward"] * (1.01 * day)
+    enemy["xp_reward"] = enemy["xp_reward"] * (1.01 * day)
     return enemy
 
 def party_battle_flow(party, enemy):
@@ -398,6 +425,8 @@ def party_battle_flow(party, enemy):
     battle(party, enemy)
     if party_is_alive(party):
         give_loot(party, enemy)
+        for player in party:
+            player["mana"] = player["max_mana"]
     else:
         print("You have been defeated.")
     return remove_dead(party)
@@ -418,6 +447,8 @@ def rest_at_campfire(party):
             print("=" * 60)
             pause()
 
+def spell_check(player, spell):
+    return player if player["mana"] >= spell["mana_cost"] else False
 
 def xp_to_level(level):
     return 50 * level
@@ -635,7 +666,7 @@ def main():
         print("6) Quit without saving")
         choice = input("Enter your choice: ")
         if choice == "1":
-            enemy = choose_random_enemy()
+            enemy = choose_random_enemy(day)
             party_battle_flow(party, enemy)
             day += 1
         elif choice == "2":
