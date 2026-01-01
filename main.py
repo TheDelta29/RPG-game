@@ -157,6 +157,19 @@ shop_items = [
     {"name": "Heart of the Voidless", "rarity": "voidless", "attack": 0, "defense": 12, "max_hp": 200, "price": 9500},
 ]
 
+crits = {
+    1: "Critical hit!",
+    2: "Double crit!",
+    3: "Triple crit!",
+    4: "Quadruple crit!",
+    5: "Quintuple crit!",
+    6: "Sextuple crit!",
+    7: "Septuple crit!",
+    8: "Octuple crit!",
+    9: "Nonuple crit!",
+    10: "Decuple crit!",
+}
+
 spells = [
     {
         "name": "Fireball",
@@ -247,12 +260,39 @@ def calculate_damage(attacker, defender):
 
 
 def apply_damage(attacker, defender):
+
+    if random.random() < dodge_chance(defender):
+        print(f"{defender['name']} has dodged the attack !")
+        return 0
+
     damage = calculate_damage(attacker, defender)
+    p = crit_chance(attacker)
+    layers = int(p)
+    extra = p - layers
+
+    if random.random() < extra:
+        layers += 1
+
+    if layers > 0:
+        text = crits.get(layers, f"{layers}x critical hit!")
+        print(text)
+        pause()
+        damage *= 2 ** layers
+
     defender["hp"] = defender["hp"] - damage
     if defender["hp"] <= 0:
         defender["hp"] = 0
-    return defender["hp"]
+    return damage
 
+def dodge_chance(player):
+    agility = player.get("agility", 0)
+    cap = 0.35
+    scaling = 40
+    return cap * (agility / (agility + scaling)) if agility > 0 else 0
+
+def crit_chance(player):
+    agility = player.get("agility", 0)
+    return agility / 100
 
 def is_alive(player):
     return player["hp"] > 0
@@ -314,9 +354,8 @@ def party_is_alive(party):
 
 def player_turn(attacker, defender):
     was_alive = is_alive(defender)
-    dmg = calculate_damage(attacker, defender)
     if was_alive:
-        apply_damage(attacker, defender)
+        dmg = apply_damage(attacker, defender)
         print("=" * 60)
         print(f"{attacker['name']} has dealt", dmg, f"damage to {defender['name']}")
         print(f"{defender['name']} : ", defender["hp"],'/',defender["max_hp"], "HP")
@@ -372,8 +411,9 @@ def pause():
 
 def check_level_up(player):
     while player["xp"] >= xp_to_level(player["level"]):
+        cost = xp_to_level(player["level"])
+        player["xp"] -= cost
         player["level"] += 1
-        player["xp"] -= xp_to_level(player["level"])
         player["max_hp"] += 5
         player["stat_points"] += 3
         print(f"{player['name']} has leveled up to Lv. {player['level']}!")
@@ -411,12 +451,12 @@ def give_loot(party, enemy):
 def choose_random_enemy(day):
     rand = random.choice(enemies)
     enemy=copy.deepcopy(rand)
-    enemy["hp"] = enemy["hp"] * (1.01 * day)
-    enemy["max_hp"] = enemy["max_hp"] * (1.01 * day)
-    enemy["attack"] = enemy["attack"] * (1.01 * day)
-    enemy["defense"] = enemy["defense"] * (1.01 * day)
-    enemy["gold_reward"] = enemy["gold_reward"] * (1.01 * day)
-    enemy["xp_reward"] = enemy["xp_reward"] * (1.01 * day)
+    enemy["hp"] = int(enemy["hp"] * (1.01 * day))
+    enemy["max_hp"] = int(enemy["max_hp"] * (1.01 * day))
+    enemy["attack"] = int(enemy["attack"] * (1.01 * day))
+    enemy["defense"] = int(enemy["defense"] * (1.01 * day))
+    enemy["gold_reward"] = int(enemy["gold_reward"] * (1.01 * day))
+    enemy["xp_reward"] = int(enemy["xp_reward"] * (1.01 * day))
     return enemy
 
 def party_battle_flow(party, enemy):
@@ -466,9 +506,10 @@ def spend_stat_points(player):
             print("You don't have enough stat points!")
         else:
             player["stat_points"] -= int(choice)
-            print("1) Max HP")
-            print("2) Attack")
-            print("3) Defense")
+            print("1) Max HP  | This increases your maximum health.")
+            print("2) Attack  | This increases your base damage.")
+            print("3) Defense  | This reduces the damage you receive.")
+            print("4) Agility  | This increases your chance to dodge attacks and your critical strike chance.")
             choice2 = input("What do you want to spend them on ? ")
             if choice2 == "1":
                 player["max_hp"] += int(choice)
@@ -480,6 +521,9 @@ def spend_stat_points(player):
             elif choice2 == "3":
                 player["defense"] += int(choice)
                 print("You have increased your defense by :", choice)
+            elif choice2 == "4":
+                player["agility"] += int(choice)
+                print("You have increased your agility by :", choice)
             else:
                 print("Invalid choice!")
 
