@@ -5,6 +5,7 @@
 import random
 import copy
 import json
+from colorama import *
 
 player1 = {
     "name": "Aria",
@@ -277,7 +278,7 @@ def apply_damage(attacker, defender):
         text = crits.get(layers, f"{layers}x critical hit!")
         print(text)
         pause()
-        damage *= 2 ** layers
+        damage *= 2
 
     defender["hp"] = defender["hp"] - damage
     if defender["hp"] <= 0:
@@ -395,11 +396,11 @@ def player_turn(attacker, defender):
         if choice == "1" :
             dmg = apply_damage(attacker, defender)
             print("=" * 60)
-            print(f"{attacker['name']} has dealt", dmg, f"damage to {defender['name']}")
-            print(f"{defender['name']} : ", defender["hp"],'/',defender["max_hp"], "HP")
+            print(Fore.GREEN,Style.BRIGHT,f"{attacker['name']}", Style.RESET_ALL, "has dealt",Fore.RED,Style.BRIGHT,dmg,Style.RESET_ALL, f"damage to {defender['name']}")
+            print(Fore.RED,Style.BRIGHT,f"{defender['name']}",Style.RESET_ALL, ": ", Fore.RED,Style.BRIGHT,defender["hp"],'/',defender["max_hp"],Style.RESET_ALL, "HP")
             print("=" * 60)
         elif choice == "2" :
-            print(f"You currently have {attacker['mana']} mana")
+            print("You currently have", Fore.BLUE,Style.BRIGHT,f"{attacker['mana']}",Style.RESET_ALL,"mana")
             print("1) Fireball | Damage : 45 | Mana cost : 50")
             print("2) Icequake | Damage : 30 | Mana cost : 35")
             print("3) Back")
@@ -407,8 +408,8 @@ def player_turn(attacker, defender):
             if choice2 == "1" :
                 dmg = apply_spell_damage(spells[0], attacker, defender)
                 print("=" * 60)
-                print(f"{attacker['name']} has cast Fireball and dealt", dmg, f"damage to {defender['name']}")
-                print(f"{defender['name']} : ", defender["hp"],'/',defender["max_hp"], "HP")
+                print(Fore.GREEN,Style.BRIGHT,f"{attacker['name']}",Style.RESET_ALL, "has cast Fireball and dealt",Fore.RED,Style.BRIGHT,dmg,Style.RESET_ALL, f"damage to {defender['name']}")
+                print(Fore.GREEN,Style.BRIGHT,f"{defender['name']}",Style.RESET_ALL, " : ", Fore.RED,Style.BRIGHT,defender["hp"],'/',defender["max_hp"],Style.RESET_ALL, "HP")
                 print("=" * 60)
             elif choice2 == "2" :
                 dmg = apply_spell_damage(spells[1], attacker, defender)
@@ -483,7 +484,12 @@ def enemy_turn(enemy, party):
     if target is None:
         return None
     else:
-        player_turn(enemy, target)
+        dmg = apply_damage(enemy, target)
+        print("=" * 60)
+        print(f"{enemy["name"]} has dealt {dmg} damage to {target['name']}!")
+        print(f"{target['name']} : ", target["hp"],'/', target["max_hp"], "HP")
+        print("=" * 60)
+
     return target
 
 def pause():
@@ -576,12 +582,23 @@ def spell_check(player, spell):
 def xp_to_level(level):
     return 50 * level
 
+def display_stat_page(player):
+    print(f"Name : {player['name']}")
+    print(f"Level : {player['level']}")
+    print(f"Experience : {player['xp']}/{xp_to_level(player['level'])}")
+    print(f"Health : {player['hp']}/{player['max_hp']}")
+    print(f"Strength : {player.get('strength', 0)}")
+    print(f"Defense : {player.get('defense', 0)}")
+    print(f"Agility : {player.get('agility', 0)}")
+    print(f"Intelligence : {player.get('intelligence', 0)}")
+    print(f"Mana : {player['mana']}/{player['max_mana']}")
+    print(f"Available Stat Points : {player['stat_points']}")
+    return
+
 def spend_stat_points(player):
     print("You can spend your stat points to upgrade your character :")
-    print(f"Max HP : {player["max_hp"]}")
-    print(f"Attack : {player["attack"]}")
-    print(f"Defense : {player['defense']}")
-    choice = input("Enter the number of stat points you want to spend (or q to quit) : ").strip()
+    display_stat_page(player)
+    choice = input("Enter the number of stat points you want to spend (or q to quit) : ").strip().lower()
     if choice == "q":
         return player
     if choice.isdigit():
@@ -592,7 +609,8 @@ def spend_stat_points(player):
             print("1) Max HP  | This increases your maximum health.")
             print("2) Attack  | This increases your base damage.")
             print("3) Defense  | This reduces the damage you receive.")
-            print("4) Agility  | This increases your chance to dodge attacks and your critical strike chance.")
+            print("4) Agility  | This increases your chance to dodge attacks and your critical strike chance for attacks.")
+            print("5) Intelligence | This increases your critical hit rate with spells and your max mana.")
             choice2 = input("What do you want to spend them on ? ")
             if choice2 == "1":
                 player["max_hp"] += int(choice)
@@ -607,6 +625,11 @@ def spend_stat_points(player):
             elif choice2 == "4":
                 player["agility"] += int(choice)
                 print("You have increased your agility by :", choice)
+            elif choice2 == "5":
+                player["intelligence"] += int(choice)
+                player["max_mana"] += int(choice)
+                player["mana"] = player["max_mana"]
+                print("You have increased your intelligence and your max mana by :", choice)
             else:
                 print("Invalid choice!")
 
@@ -807,10 +830,14 @@ def main():
             for i, player in enumerate(party, start=1):
                 print(f"{i}) {player['name']}")
             choice = input("Enter player number: ")
+            if not choice.isdigit():
+                print("Choice invalid")
+                continue
             idx = int(choice) - 1
             if idx < 0 or idx >= len(party):
                 print("Invalid player.")
                 continue
+
             player = party[idx]
             print("=" * 60)
             print(f"Level : {player['level']}")
