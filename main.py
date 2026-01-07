@@ -294,6 +294,10 @@ def crit_chance(player):
     agility = player.get("agility", 0)
     return agility / 100
 
+def spell_crit_chance(player):
+    intelligence = player.get("intelligence", 0)
+    return intelligence / 100
+
 def is_alive(player):
     return player["hp"] > 0
 
@@ -339,6 +343,34 @@ def party_take_damage(party, attacker):
         new_hp.append(apply_damage(attacker, player))
     return new_hp
 
+def use_spell(player, spell):
+    if player["mana"] < spell["mana_cost"]:
+        print("You don't have enough mana!")
+        return
+    else:
+        player["mana"] -= spell["mana_cost"]
+        return spell["damage"]
+
+def apply_spell_damage(spell, attacker, defender):
+    damage = spell["damage"]
+    p = spell_crit_chance(attacker)
+    layers = int(p)
+    extra = p - layers
+
+    if random.random() < extra:
+        layers += 1
+
+    if layers > 0:
+        text = crits.get(layers, f"{layers}x critical hit!")
+        print(text)
+        pause()
+        damage *= 2 ** layers
+
+    defender["hp"] = defender["hp"] - damage
+    if defender["hp"] <= 0:
+        defender["hp"] = 0
+    return damage
+
 def remove_dead(party):
     new_party=[]
     for player in party:
@@ -355,11 +387,60 @@ def party_is_alive(party):
 def player_turn(attacker, defender):
     was_alive = is_alive(defender)
     if was_alive:
-        dmg = apply_damage(attacker, defender)
-        print("=" * 60)
-        print(f"{attacker['name']} has dealt", dmg, f"damage to {defender['name']}")
-        print(f"{defender['name']} : ", defender["hp"],'/',defender["max_hp"], "HP")
-        print("=" * 60)
+        print("1) Attack")
+        print("2) Cast a spell")
+        print("3) Use an item")
+        print("4) Try to escape")
+        choice = input('Which action do you want to do ?')
+        if choice == "1" :
+            dmg = apply_damage(attacker, defender)
+            print("=" * 60)
+            print(f"{attacker['name']} has dealt", dmg, f"damage to {defender['name']}")
+            print(f"{defender['name']} : ", defender["hp"],'/',defender["max_hp"], "HP")
+            print("=" * 60)
+        elif choice == "2" :
+            print(f"You currently have {attacker['mana']} mana")
+            print("1) Fireball | Damage : 45 | Mana cost : 50")
+            print("2) Icequake | Damage : 30 | Mana cost : 35")
+            print("3) Back")
+            choice2 = input("Which spell do you want to cast ? ")
+            if choice2 == "1" :
+                dmg = apply_spell_damage(spells[0], attacker, defender)
+                print("=" * 60)
+                print(f"{attacker['name']} has cast Fireball and dealt", dmg, f"damage to {defender['name']}")
+                print(f"{defender['name']} : ", defender["hp"],'/',defender["max_hp"], "HP")
+                print("=" * 60)
+            elif choice2 == "2" :
+                dmg = apply_spell_damage(spells[1], attacker, defender)
+                print("=" * 60)
+                print(f"{attacker['name']} has cast Icequake and dealt", dmg, f"damage to {defender['name']}")
+                print("=" * 60)
+            elif choice2 == "3" :
+                return
+        elif choice == "3" :
+            print("1) Potion | Heal amount : 30")
+            print("2) Back")
+            choice3 = input("Which item do you want to use ? ")
+            if choice3 == "1" :
+                if attacker["hp"] == attacker["max_hp"]:
+                    print("You are already at full health!")
+                    return
+                elif use_potion(attacker, 30):
+                    use_potion(attacker, 30)
+                    print("=" * 60)
+                    print(f"{attacker['name']} has used a potion and healed for 30 HP!")
+                    print("=" * 60)
+                else:
+                    print("You don't have a potion!")
+                    return
+            elif choice3 == "2" :
+                return
+        elif choice == "4" :
+            ans = input("Are you sure you want to try to run away ? y/n")
+            if ans == 'y':
+                print("=" * 60)
+                print(f"{attacker['name']} has run away from the battle!")
+                print("=" * 60)
         if not is_alive(defender):
             print(f"{defender['name']} has fallen!")
     return defender["hp"]
@@ -462,6 +543,8 @@ def choose_random_enemy(day):
 def party_battle_flow(party, enemy):
     print("=" * 60)
     print(f"A wild {enemy["name"]} has appeared !")
+    print(f"It has {enemy["hp"]}/{enemy['max_hp']} HP !")
+    print("=" * 60)
     battle(party, enemy)
     if party_is_alive(party):
         give_loot(party, enemy)
