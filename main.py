@@ -1,5 +1,5 @@
 ## ============================================================================
-## PART 1: PLAYER DATA STRUCTURES
+## PART 1: DATA IMPORT
 ## ============================================================================
 
 import random
@@ -7,247 +7,23 @@ import copy
 import json
 from colorama import *
 
-player1 = {
-    "name": "Aria",
-    "hp": 100,
-    "max_hp": 100,
-    "attack": 15,
-    "defense": 5,
-    "vigor": 20,
-    "strength": 10,
-    "agility": 13,
-    "intelligence": 10,
-    "wisdom": 5,
-    "gold": 20,
-    "mana": 100,
-    "max_mana": 100,
-    "inventory":
-        {
-            "potion" : 2,
-            "elixir": 1
-        },
-    "equipment": {},
-    "level": 1,
-    "xp": 0,
-    "stat_points" : 3
-}
+with open("data/enemies.json", "r", encoding="utf-8") as f:
+    enemies = json.load(f)
 
-player2 = {
-    "name": "Borin",
-    "hp": 80,
-    "max_hp": 80,
-    "attack": 20,
-    "defense": 2,
-    "vigor": 16,
-    "strength": 15,
-    "agility": 5,
-    "intelligence": 8,
-    "wisdom": 6,
-    "gold": 15,
-    "mana": 80,
-    "max_mana": 80,
-    "inventory":
-        {
-            "potion" : 1,
-            "bomb" : 1
-         },
-    "equipment": {},
-    "level": 1,
-    "xp": 0,
-    "stat_points" : 3
-}
+with open("data/shop_items.json", "r", encoding="utf-8") as f:
+    shop_items = json.load(f)
 
-player3 = {
-    "name": "Cyra",
-    "hp": 50,
-    "max_hp": 60,
-    "attack": 10,
-    "defense": 8,
-    "vigor": 10,
-    "strength": 7,
-    "agility": 8,
-    "intelligence": 13,
-    "wisdom": 10,
-    "gold": 15,
-    "mana": 130,
-    "max_mana": 130,
-    "inventory": {},
-    "equipment": {},
-    "level": 1,
-    "xp": 0,
-    "stat_points" : 3
-}
+with open("data/players.json", "r", encoding="utf-8") as f:
+    party_template = json.load(f)
 
-party = [player1, player2, player3]
+with open("data/crits.json", "r", encoding="utf-8") as f:
+    crits_raw = json.load(f)
 
-shop_items = [
-    # ===== COMMON =====
-    {"name": "Rusty Sword", "rarity": "common", "attack": 3, "defense": 0, "max_hp": 0, "price": 40},
-    {"name": "Wooden Club", "rarity": "common", "attack": 2, "defense": 1, "max_hp": 0, "price": 35},
-    {"name": "Training Dagger", "rarity": "common", "attack": 2, "defense": 0, "max_hp": 0, "price": 45},
-    {"name": "Padded Vest", "rarity": "common", "attack": 0, "defense": 3, "max_hp": 0, "price": 40},
-    {"name": "Worn Buckler", "rarity": "common", "attack": 0, "defense": 2, "max_hp": 0, "price": 50},
-    {"name": "Traveler's Boots", "rarity": "common", "attack": 0, "defense": 2, "max_hp": 0, "price": 45},
-    {"name": "Simple Amulet", "rarity": "common", "attack": 0, "defense": 0, "max_hp": 3, "price": 35},
-    {"name": "Leather Gloves", "rarity": "common", "attack": 1, "defense": 1, "max_hp": 0, "price": 30},
+crits = {int(k): v for k, v in crits_raw.items()}
 
-    # ===== UNCOMMON =====
-    {"name": "Steel Shortsword", "rarity": "uncommon", "attack": 6, "defense": 0, "max_hp": 0, "price": 80},
-    {"name": "Balanced Spear", "rarity": "uncommon", "attack": 5, "defense": 2, "max_hp": 0, "price": 95},
-    {"name": "Hunter's Bow", "rarity": "uncommon", "attack": 5, "defense": 0, "max_hp": 0, "price": 100},
-    {"name": "Reinforced Leather Armor", "rarity": "uncommon", "attack": 0, "defense": 6, "max_hp": 0, "price": 90},
-    {"name": "Guard's Shield", "rarity": "uncommon", "attack": 0, "defense": 4, "max_hp": 0, "price": 100},
-    {"name": "Scout's Boots", "rarity": "uncommon", "attack": 0, "defense": 3, "max_hp": 0, "price": 95},
-    {"name": "Sturdy Pendant", "rarity": "uncommon", "attack": 0, "defense": 0, "max_hp": 10, "price": 80},
-    {"name": "Warrior's Gloves", "rarity": "uncommon", "attack": 3, "defense": 1, "max_hp": 0, "price": 90},
+with open("data/spells.json", "r", encoding="utf-8") as f:
+    spells = json.load(f)
 
-    # ===== RARE =====
-    {"name": "Knight's Longsword", "rarity": "rare", "attack": 10, "defense": 0, "max_hp": 0, "price": 150},
-    {"name": "Twinfang Daggers", "rarity": "rare", "attack": 8, "defense": 0, "max_hp": 0, "price": 170},
-    {"name": "Warhammer of Bruising", "rarity": "rare", "attack": 11, "defense": 0, "max_hp": 0, "price": 160},
-    {"name": "Scale Mail Armor", "rarity": "rare", "attack": 0, "defense": 10, "max_hp": 0, "price": 150},
-    {"name": "Tower Shield", "rarity": "rare", "attack": 0, "defense": 8, "max_hp": 0, "price": 180},
-    {"name": "Strider's Boots", "rarity": "rare", "attack": 0, "defense": 5, "max_hp": 0, "price": 170},
-    {"name": "Heartstone Amulet", "rarity": "rare", "attack": 0, "defense": 0, "max_hp": 25, "price": 160},
-    {"name": "Brawler's Wraps", "rarity": "rare", "attack": 7, "defense": 2, "max_hp": 0, "price": 170},
-
-    # ===== EPIC =====
-    {"name": "Dragonscale Saber", "rarity": "epic", "attack": 15, "defense": 0, "max_hp": 0, "price": 260},
-    {"name": "Storm Pike", "rarity": "epic", "attack": 13, "defense": 4, "max_hp": 0, "price": 270},
-    {"name": "Shadowstrike Blades", "rarity": "epic", "attack": 14, "defense": -5, "max_hp": 0, "price": 280},
-    {"name": "Dragonscale Armor", "rarity": "epic", "attack": 0, "defense": 15, "max_hp": 0, "price": 260},
-    {"name": "Bulwark of Dawn", "rarity": "epic", "attack": 0, "defense": 12, "max_hp": 0, "price": 280},
-    {"name": "Windrunner Greaves", "rarity": "epic", "attack": 0, "defense": 8, "max_hp": 0, "price": 270},
-    {"name": "Amulet of Vitality", "rarity": "epic", "attack": 0, "defense": 0, "max_hp": 50, "price": 260},
-    {"name": "Gauntlets of Fury", "rarity": "epic", "attack": 12, "defense": 4, "max_hp": 0, "price": 280},
-
-    # ===== LEGENDARY =====
-    {"name": "Blade of the Fallen Star", "rarity": "legendary", "attack": 20, "defense": 0, "max_hp": 0, "price": 380},
-    {"name": "Lance of the Eternal Guard", "rarity": "legendary", "attack": 18, "defense": 6, "max_hp": 0, "price": 390},
-    {"name": "Nightveil Daggers", "rarity": "legendary", "attack": 17, "defense": -5, "max_hp": 0, "price": 400},
-    {"name": "Aegis of Ages", "rarity": "legendary", "attack": 0, "defense": 20, "max_hp": 0, "price": 380},
-    {"name": "Celestial Plate", "rarity": "legendary", "attack": 0, "defense": 18, "max_hp": 40, "price": 390},
-    {"name": "Boots of the Horizon", "rarity": "legendary", "attack": 0, "defense": 10, "max_hp": 0, "price": 380},
-    {"name": "Charm of the Titan Heart", "rarity": "legendary", "attack": 0, "defense": 5, "max_hp": 80, "price": 390},
-    {"name": "Gauntlets of the Colossus", "rarity": "legendary", "attack": 18, "defense": 8, "max_hp": 0, "price": 400},
-
-    # ===== MYTHIC =====
-    {"name": "Worldbreaker Greatsword", "rarity": "mythic", "attack": 28, "defense": -5, "max_hp": 0, "price": 600},
-    {"name": "Spear of Infinite Dawn", "rarity": "mythic", "attack": 24, "defense": 10, "max_hp": 0, "price": 620},
-    {"name": "Phantom Edge", "rarity": "mythic", "attack": 26, "defense": -8, "max_hp": 0, "price": 620},
-    {"name": "Mythic Dragonplate", "rarity": "mythic", "attack": 0, "defense": 26, "max_hp": 60, "price": 600},
-    {"name": "Shield of Timeless Silence", "rarity": "mythic", "attack": 0, "defense": 24, "max_hp": 0, "price": 620},
-    {"name": "Boots of the First Wind", "rarity": "mythic", "attack": 0, "defense": 14, "max_hp": 0, "price": 600},
-    {"name": "Heart of the World Tree", "rarity": "mythic", "attack": 0, "defense": 8, "max_hp": 120, "price": 620},
-    {"name": "Gauntlets of Primordial Rage", "rarity": "mythic", "attack": 24, "defense": 10, "max_hp": 0, "price": 620},
-
-    # ===== EVIL =====
-    {"name": "Blood-Drinker Blade", "rarity": "evil", "attack": 24, "defense": 0, "max_hp": -5, "price": 450},
-    {"name": "Chains of Torment", "rarity": "evil", "attack": 0, "defense": 22, "max_hp": -10, "price": 430},
-    {"name": "Cowl of Whispers", "rarity": "evil", "attack": 18, "defense": 0, "max_hp": -20, "price": 420},
-    {"name": "Grasp of the Damned", "rarity": "evil", "attack": 20, "defense": 5, "max_hp": 0, "price": 440},
-    {"name": "Boots of the Condemned", "rarity": "evil", "attack": 0, "defense": 10, "max_hp": 0, "price": 430},
-    {"name": "Amulet of Withering", "rarity": "evil", "attack": 0, "defense": -4, "max_hp": 80, "price": 450},
-
-    # ===== VOIDLESS =====
-    {"name": "Voidless Edge", "rarity": "voidless", "attack": 40, "defense": -10, "max_hp": 0, "price": 9500},
-    {"name": "Spear of Null Horizons", "rarity": "voidless", "attack": 35, "defense": 20, "max_hp": 0, "price": 9500},
-    {"name": "Armor of the Empty King", "rarity": "voidless", "attack": 0, "defense": 35, "max_hp": 120, "price": 9500},
-    {"name": "Shield of Unmade Light", "rarity": "voidless", "attack": 0, "defense": 32, "max_hp": 0, "price": 9500},
-    {"name": "Boots of Silent Infinity", "rarity": "voidless", "attack": 0, "defense": 20, "max_hp": 0, "price": 9500},
-    {"name": "Heart of the Voidless", "rarity": "voidless", "attack": 0, "defense": 12, "max_hp": 200, "price": 9500},
-]
-
-crits = {
-    1: "Critical hit!",
-    2: "Double crit!",
-    3: "Triple crit!",
-    4: "Quadruple crit!",
-    5: "Quintuple crit!",
-    6: "Sextuple crit!",
-    7: "Septuple crit!",
-    8: "Octuple crit!",
-    9: "Nonuple crit!",
-    10: "Decuple crit!",
-}
-
-spells = [
-    {
-        "name": "Fireball",
-        "damage": 45,
-        "mana_cost": 50,
-    },
-
-    {
-        "name": "Icequake",
-        "damage": 30,
-        "mana_cost": 35,
-    },
-
-]
-
-enemies = [
-    {
-        "name": "Slime",
-        "hp": 30,
-        "max_hp": 30,
-        "attack": 8,
-        "defense": 1,
-        "vigor": 6,
-        "strength": 5,
-        "agility": 4,
-        "intelligence": 4,
-        "wisdom": 5,
-        "inventory": [],
-        "gold_reward": 10,
-        "xp_reward": 45
-    },
-    {
-        "name": "Big Slime",
-        "hp": 50,
-        "max_hp": 50,
-        "attack": 13,
-        "defense": 3,
-        "vigor": 10,
-        "strength": 8,
-        "agility": 6,
-        "intelligence": 5,
-        "wisdom": 3,
-        "inventory": [],
-        "gold_reward": 30,
-        "xp_reward": 90
-    },
-    {
-        "name": "Goblin",
-        "hp": 45,
-        "max_hp": 45,
-        "attack": 12,
-        "defense": 3,
-        "vigor": 9,
-        "strength": 8,
-        "agility": 4,
-        "intelligence": 7,
-        "wisdom": 5,
-        "inventory": [],
-        "gold_reward": 20,
-        "xp_reward": 75
-    },
-    {
-        "name": "Orc",
-        "hp": 70,
-        "max_hp": 70,
-        "attack": 18,
-        "defense": 5,
-        "vigor": 14,
-        "strength": 14,
-        "agility": 8,
-        "intelligence": 3,
-        "wisdom": 5,
-        "inventory": [],
-        "gold_reward": 35,
-        "xp_reward": 150
-    },
-]
 
 ## ============================================================================
 ## PART 2: CORE BATTLE FUNCTIONS
@@ -321,11 +97,11 @@ def count_item(player, item_name):
     return counter
 
 def use_potion(player, heal_amount):
-    if count_item(player, "potion") > 0:
+    if player["inventory"].get('potion', 0) > 0:
         player["hp"] += heal_amount
         if player["hp"] > player["max_hp"]:
             player["hp"] = player["max_hp"]
-        player["inventory"].remove("potion")
+        player["inventory"]['potion'] -= 1
         return True
     return False
 
@@ -365,7 +141,7 @@ def apply_spell_damage(spell, attacker, defender):
         text = crits.get(layers, f"{layers}x critical hit!")
         print(text)
         pause()
-        damage *= 2 ** layers
+        damage *= 2
 
     defender["hp"] = defender["hp"] - damage
     if defender["hp"] <= 0:
@@ -396,25 +172,26 @@ def player_turn(attacker, defender):
         if choice == "1" :
             dmg = apply_damage(attacker, defender)
             print("=" * 60)
-            print(Fore.GREEN,Style.BRIGHT,f"{attacker['name']}", Style.RESET_ALL, "has dealt",Fore.RED,Style.BRIGHT,dmg,Style.RESET_ALL, f"damage to {defender['name']}")
-            print(Fore.RED,Style.BRIGHT,f"{defender['name']}",Style.RESET_ALL, ": ", Fore.RED,Style.BRIGHT,defender["hp"],'/',defender["max_hp"],Style.RESET_ALL, "HP")
+            print(Fore.GREEN,Style.BRIGHT,f"{attacker['name']}", Style.RESET_ALL, "has dealt",Fore.RED,Style.BRIGHT,round(dmg),Style.RESET_ALL, f"damage to {defender['name']}")
+            print(Fore.RED,Style.BRIGHT,f"{defender['name']}",Style.RESET_ALL, ":", Fore.RED,Style.BRIGHT,round(defender["hp"]),'/',round(defender["max_hp"]),Style.RESET_ALL, "HP")
             print("=" * 60)
         elif choice == "2" :
-            print("You currently have", Fore.BLUE,Style.BRIGHT,f"{attacker['mana']}",Style.RESET_ALL,"mana")
-            print("1) Fireball | Damage : 45 | Mana cost : 50")
-            print("2) Icequake | Damage : 30 | Mana cost : 35")
+            print("You currently have",Fore.BLUE,Style.BRIGHT,f"{attacker['mana']}",Style.RESET_ALL," mana")
+            print("1) Fireball |",Fore.RED,Style.BRIGHT,"Damage : 45",Style.RESET_ALL,"|",Fore.BLUE,Style.BRIGHT,"Mana cost : 50",Style.RESET_ALL)
+            print("2) Icequake |",Fore.RED,Style.BRIGHT,"Damage : 30",Style.RESET_ALL,"|",Fore.BLUE,Style.BRIGHT,"Mana cost : 35",Style.RESET_ALL)
             print("3) Back")
             choice2 = input("Which spell do you want to cast ? ")
             if choice2 == "1" :
                 dmg = apply_spell_damage(spells[0], attacker, defender)
                 print("=" * 60)
-                print(Fore.GREEN,Style.BRIGHT,f"{attacker['name']}",Style.RESET_ALL, "has cast Fireball and dealt",Fore.RED,Style.BRIGHT,dmg,Style.RESET_ALL, f"damage to {defender['name']}")
-                print(Fore.GREEN,Style.BRIGHT,f"{defender['name']}",Style.RESET_ALL, " : ", Fore.RED,Style.BRIGHT,defender["hp"],'/',defender["max_hp"],Style.RESET_ALL, "HP")
+                print(Fore.GREEN,Style.BRIGHT,f"{attacker['name']}",Style.RESET_ALL, "has cast Fireball and dealt",Fore.RED,Style.BRIGHT,round(dmg),Style.RESET_ALL, f"damage to {defender['name']}")
+                print(Fore.GREEN,Style.BRIGHT,f"{defender['name']}",Style.RESET_ALL, ":", Fore.RED,Style.BRIGHT,round(defender["hp"]),'/',round(defender["max_hp"]),Style.RESET_ALL, "HP")
                 print("=" * 60)
             elif choice2 == "2" :
                 dmg = apply_spell_damage(spells[1], attacker, defender)
                 print("=" * 60)
-                print(f"{attacker['name']} has cast Icequake and dealt", dmg, f"damage to {defender['name']}")
+                print(Fore.GREEN,Style.BRIGHT,f"{attacker['name']}",Style.RESET_ALL, "has cast Icequake and dealt",Fore.RED,Style.BRIGHT,round(dmg),Style.RESET_ALL, f"damage to {defender['name']}")
+                print(Fore.GREEN,Style.BRIGHT, f"{defender['name']}", Style.RESET_ALL, ":", Fore.RED, Style.BRIGHT,round(defender["hp"]), '/', round(defender["max_hp"]), Style.RESET_ALL, "HP")
                 print("=" * 60)
             elif choice2 == "3" :
                 return
@@ -426,10 +203,10 @@ def player_turn(attacker, defender):
                 if attacker["hp"] == attacker["max_hp"]:
                     print("You are already at full health!")
                     return
-                elif use_potion(attacker, 30):
+                elif "potion" in attacker["inventory"]:
                     use_potion(attacker, 30)
                     print("=" * 60)
-                    print(f"{attacker['name']} has used a potion and healed for 30 HP!")
+                    print(Fore.GREEN,Style.BRIGHT,f"{attacker['name']}",Style.RESET_ALL,"has used a potion and healed for",Fore.GREEN,Style.BRIGHT,"30",Style.RESET_ALL,"HP!")
                     print("=" * 60)
                 else:
                     print("You don't have a potion!")
@@ -493,7 +270,7 @@ def enemy_turn(enemy, party):
     return target
 
 def pause():
-    next = input("")
+    next = input("Press Enter to continue...")
     return next
 
 def check_level_up(player):
@@ -538,12 +315,16 @@ def give_loot(party, enemy):
 def choose_random_enemy(day):
     rand = random.choice(enemies)
     enemy=copy.deepcopy(rand)
-    enemy["hp"] = int(enemy["hp"] * (1.01 * day))
-    enemy["max_hp"] = int(enemy["max_hp"] * (1.01 * day))
-    enemy["attack"] = int(enemy["attack"] * (1.01 * day))
-    enemy["defense"] = int(enemy["defense"] * (1.01 * day))
-    enemy["gold_reward"] = int(enemy["gold_reward"] * (1.01 * day))
-    enemy["xp_reward"] = int(enemy["xp_reward"] * (1.01 * day))
+
+    hp_scale = 1.05 ** (day - 1 )
+    stat_scale = 1.03 ** (day - 1 )
+
+    enemy["hp"] = int(enemy["hp"] * hp_scale)
+    enemy["max_hp"] = int(enemy["max_hp"] * hp_scale)
+    enemy["attack"] = int(enemy["attack"] * stat_scale)
+    enemy["defense"] = int(enemy["defense"] * stat_scale)
+    enemy["gold_reward"] = int(enemy["gold_reward"] * stat_scale)
+    enemy["xp_reward"] = int(enemy["xp_reward"] * stat_scale)
     return enemy
 
 def party_battle_flow(party, enemy):
@@ -734,7 +515,7 @@ def visit_village(party, day):
 
             print("c) Change buyer")
             print("m) Return to menu")
-            choice = input("Enter your choice, or (c) change buyer, (m) to return to menu: ").strip().lower()
+            choice = input("Enter your choice, or (c) change buyer, (m) to return to menu : ").strip().lower()
 
             if choice == "c":
                 break
@@ -770,11 +551,15 @@ def visit_village(party, day):
             print(f"{buyer['name']} has bought a(n) {item['name']} for {item['price']} gold !")
             print(f"{buyer['name']} now has {buyer['gold']} gold !")
             pause()
+            continue
+
+    return
 
 
 def main():
 
     global party
+
 
     print("1) New game")
     print("2) Load game")
@@ -783,6 +568,7 @@ def main():
     day = 1
 
     if start_choice == "1":
+        party = copy.deepcopy(party_template)
         print("Welcome to Dino's Adventure (Press enter to continue)")
         pause()
         print("You can select your action choices with the numbers attributed to them (Press enter to continue)")
@@ -840,12 +626,12 @@ def main():
 
             player = party[idx]
             print("=" * 60)
-            print(f"Level : {player['level']}")
-            print(f"Available Stat Points : {player['stat_points']}")
-            print(f"{player['name']} : ", player["hp"],'/',player["max_hp"], "HP")
-            print(f"Attack : {player["attack"]}")
-            print(f"Defense : {player["defense"]}")
-            print(f"Gold : {player['gold']}")
+            print(Fore.GREEN,Style.BRIGHT,f"Level : {player['level']}")
+            print(Fore.GREEN,Style.BRIGHT,f"Available Stat Points : {player['stat_points']}")
+            print(Fore.RED,Style.BRIGHT,f"{player['name']} : ", player["hp"],'/',player["max_hp"], "HP")
+            print(Fore.RED,Style.BRIGHT,f"Attack : {player["attack"]}")
+            print(Fore.WHITE,Style.BRIGHT,f"Defense : {player["defense"]}")
+            print(Fore.YELLOW,Style.BRIGHT,f"Gold : {player['gold']}",Style.RESET_ALL)
             print("=" * 60)
             print("=" * 23, "- Equipments -", "=" * 23)
             for item, count in player["equipment"].items():

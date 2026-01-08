@@ -1,0 +1,77 @@
+[
+
+    {"name": "Rusty Sword", "rarity": "common", "attack": 3, "defense": 0, "max_hp": 0, "price": 40},
+    {"name": "Wooden Club", "rarity": "common", "attack": 2, "defense": 1, "max_hp": 0, "price": 35},
+    {"name": "Training Dagger", "rarity": "common", "attack": 2, "defense": 0, "max_hp": 0, "price": 45},
+    {"name": "Padded Vest", "rarity": "common", "attack": 0, "defense": 3, "max_hp": 0, "price": 40},
+    {"name": "Worn Buckler", "rarity": "common", "attack": 0, "defense": 2, "max_hp": 0, "price": 50},
+    {"name": "Traveler's Boots", "rarity": "common", "attack": 0, "defense": 2, "max_hp": 0, "price": 45},
+    {"name": "Simple Amulet", "rarity": "common", "attack": 0, "defense": 0, "max_hp": 3, "price": 35},
+    {"name": "Leather Gloves", "rarity": "common", "attack": 1, "defense": 1, "max_hp": 0, "price": 30},
+
+
+    {"name": "Steel Shortsword", "rarity": "uncommon", "attack": 6, "defense": 0, "max_hp": 0, "price": 80},
+    {"name": "Balanced Spear", "rarity": "uncommon", "attack": 5, "defense": 2, "max_hp": 0, "price": 95},
+    {"name": "Hunter's Bow", "rarity": "uncommon", "attack": 5, "defense": 0, "max_hp": 0, "price": 100},
+    {"name": "Reinforced Leather Armor", "rarity": "uncommon", "attack": 0, "defense": 6, "max_hp": 0, "price": 90},
+    {"name": "Guard's Shield", "rarity": "uncommon", "attack": 0, "defense": 4, "max_hp": 0, "price": 100},
+    {"name": "Scout's Boots", "rarity": "uncommon", "attack": 0, "defense": 3, "max_hp": 0, "price": 95},
+    {"name": "Sturdy Pendant", "rarity": "uncommon", "attack": 0, "defense": 0, "max_hp": 10, "price": 80},
+    {"name": "Warrior's Gloves", "rarity": "uncommon", "attack": 3, "defense": 1, "max_hp": 0, "price": 90},
+
+
+    {"name": "Knight's Longsword", "rarity": "rare", "attack": 10, "defense": 0, "max_hp": 0, "price": 150},
+    {"name": "Twinfang Daggers", "rarity": "rare", "attack": 8, "defense": 0, "max_hp": 0, "price": 170},
+    {"name": "Warhammer of Bruising", "rarity": "rare", "attack": 11, "defense": 0, "max_hp": 0, "price": 160},
+    {"name": "Scale Mail Armor", "rarity": "rare", "attack": 0, "defense": 10, "max_hp": 0, "price": 150},
+    {"name": "Tower Shield", "rarity": "rare", "attack": 0, "defense": 8, "max_hp": 0, "price": 180},
+    {"name": "Strider's Boots", "rarity": "rare", "attack": 0, "defense": 5, "max_hp": 0, "price": 170},
+    {"name": "Heartstone Amulet", "rarity": "rare", "attack": 0, "defense": 0, "max_hp": 25, "price": 160},
+    {"name": "Brawler's Wraps", "rarity": "rare", "attack": 7, "defense": 2, "max_hp": 0, "price": 170},
+
+
+    {"name": "Dragonscale Saber", "rarity": "epic", "attack": 15, "defense": 0, "max_hp": 0, "price": 260},
+    {"name": "Storm Pike", "rarity": "epic", "attack": 13, "defense": 4, "max_hp": 0, "price": 270},
+    {"name": "Shadowstrike Blades", "rarity": "epic", "attack": 14, "defense": -5, "max_hp": 0, "price": 280},
+    {"name": "Dragonscale Armor", "rarity": "epic", "attack": 0, "defense": 15, "max_hp": 0, "price": 260},
+    {"name": "Bulwark of Dawn", "rarity": "epic", "attack": 0, "defense": 12, "max_hp": 0, "price": 280},
+    {"name": "Windrunner Greaves", "rarity": "epic", "attack": 0, "defense": 8, "max_hp": 0, "price": 270},
+    {"name": "Amulet of Vitality", "rarity": "epic", "attack": 0, "defense": 0, "max_hp": 50, "price": 260},
+    {"name": "Gauntlets of Fury", "rarity": "epic", "attack": 12, "defense": 4, "max_hp": 0, "price": 280},
+
+
+    {"name": "Blade of the Fallen Star", "rarity": "legendary", "attack": 20, "defense": 0, "max_hp": 0, "price": 380},
+    {"name": "Lance of the Eternal Guard", "rarity": "legendary", "attack": 18, "defense": 6, "max_hp": 0, "price": 390},
+    {"name": "Nightveil Daggers", "rarity": "legendary", "attack": 17, "defense": -5, "max_hp": 0, "price": 400},
+    {"name": "Aegis of Ages", "rarity": "legendary", "attack": 0, "defense": 20, "max_hp": 0, "price": 380},
+    {"name": "Celestial Plate", "rarity": "legendary", "attack": 0, "defense": 18, "max_hp": 40, "price": 390},
+    {"name": "Boots of the Horizon", "rarity": "legendary", "attack": 0, "defense": 10, "max_hp": 0, "price": 380},
+    {"name": "Charm of the Titan Heart", "rarity": "legendary", "attack": 0, "defense": 5, "max_hp": 80, "price": 390},
+    {"name": "Gauntlets of the Colossus", "rarity": "legendary", "attack": 18, "defense": 8, "max_hp": 0, "price": 400},
+
+
+    {"name": "Worldbreaker Greatsword", "rarity": "mythic", "attack": 28, "defense": -5, "max_hp": 0, "price": 600},
+    {"name": "Spear of Infinite Dawn", "rarity": "mythic", "attack": 24, "defense": 10, "max_hp": 0, "price": 620},
+    {"name": "Phantom Edge", "rarity": "mythic", "attack": 26, "defense": -8, "max_hp": 0, "price": 620},
+    {"name": "Mythic Dragonplate", "rarity": "mythic", "attack": 0, "defense": 26, "max_hp": 60, "price": 600},
+    {"name": "Shield of Timeless Silence", "rarity": "mythic", "attack": 0, "defense": 24, "max_hp": 0, "price": 620},
+    {"name": "Boots of the First Wind", "rarity": "mythic", "attack": 0, "defense": 14, "max_hp": 0, "price": 600},
+    {"name": "Heart of the World Tree", "rarity": "mythic", "attack": 0, "defense": 8, "max_hp": 120, "price": 620},
+    {"name": "Gauntlets of Primordial Rage", "rarity": "mythic", "attack": 24, "defense": 10, "max_hp": 0, "price": 620},
+
+
+    {"name": "Blood-Drinker Blade", "rarity": "evil", "attack": 24, "defense": 0, "max_hp": -5, "price": 450},
+    {"name": "Chains of Torment", "rarity": "evil", "attack": 0, "defense": 22, "max_hp": -10, "price": 430},
+    {"name": "Cowl of Whispers", "rarity": "evil", "attack": 18, "defense": 0, "max_hp": -20, "price": 420},
+    {"name": "Grasp of the Damned", "rarity": "evil", "attack": 20, "defense": 5, "max_hp": 0, "price": 440},
+    {"name": "Boots of the Condemned", "rarity": "evil", "attack": 0, "defense": 10, "max_hp": 0, "price": 430},
+    {"name": "Amulet of Withering", "rarity": "evil", "attack": 0, "defense": -4, "max_hp": 80, "price": 450},
+
+
+    {"name": "Voidless Edge", "rarity": "voidless", "attack": 40, "defense": -10, "max_hp": 0, "price": 9500},
+    {"name": "Spear of Null Horizons", "rarity": "voidless", "attack": 35, "defense": 20, "max_hp": 0, "price": 9500},
+    {"name": "Armor of the Empty King", "rarity": "voidless", "attack": 0, "defense": 35, "max_hp": 120, "price": 9500},
+    {"name": "Shield of Unmade Light", "rarity": "voidless", "attack": 0, "defense": 32, "max_hp": 0, "price": 9500},
+    {"name": "Boots of Silent Infinity", "rarity": "voidless", "attack": 0, "defense": 20, "max_hp": 0, "price": 9500},
+    {"name": "Heart of the Voidless", "rarity": "voidless", "attack": 0, "defense": 12, "max_hp": 200, "price": 9500}
+]

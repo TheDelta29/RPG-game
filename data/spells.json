@@ -1,0 +1,4 @@
+[
+  { "name": "Fireball", "damage": 45, "mana_cost": 50 },
+  { "name": "Icequake", "damage": 30, "mana_cost": 35 }
+]
