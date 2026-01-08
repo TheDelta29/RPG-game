@@ -569,17 +569,17 @@ def main():
 
     if start_choice == "1":
         party = copy.deepcopy(party_template)
-        print("Welcome to Dino's Adventure (Press enter to continue)")
+        print("Welcome to Dino's Adventure")
         pause()
-        print("You can select your action choices with the numbers attributed to them (Press enter to continue)")
+        print("You can select your action choices with the numbers attributed to them")
         pause()
-        print("If no action is specified and nothing is happening press enter to go to the next event (Press enter to continue)")
+        print("If no action is specified and nothing is happening press enter to go to the next event")
         pause()
-        print("Each action that you do within the main menu makes a day pass (Press enter to continue)")
+        print("Each action that you do within the main menu makes a day pass")
         pause()
-        print("Each day that passes the game gets harder and more loot is available (Press enter to continue)")
+        print("Each day that passes the game gets harder and more loot is available")
         pause()
-        print("Have fun and try to survive as long as possible (Press enter to continue)")
+        print("Have fun and try to survive as long as possible")
         pause()
 
     elif start_choice == "2":
