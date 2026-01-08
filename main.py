@@ -313,8 +313,19 @@ def give_loot(party, enemy):
         return False
 
 def choose_random_enemy(day):
-    rand = random.choice(enemies)
-    enemy=copy.deepcopy(rand)
+    weights_by_tier = monster_weight(day)
+    tiers = list(weights_by_tier.keys())
+    tier_weights = [weights_by_tier[t] for t in tiers]
+    chosen_tier = random.choices(tiers, weights=tier_weights, k=1)[0]
+
+
+    chosen = [e for e in enemies if e.get("tier", 0) == chosen_tier]
+    if not chosen:
+        chosen = enemies
+
+
+    enemy=copy.deepcopy(random.choice(chosen))
+
 
     hp_scale = 1.05 ** (day - 1 )
     stat_scale = 1.03 ** (day - 1 )
@@ -440,6 +451,47 @@ def rarity_weight(day):
         "mythic": 5,
         "evil": 15,
         "voidless": 80,
+    }
+
+    weights ={}
+
+    for rarity in start:
+        a = start[rarity]
+        b = end[rarity]
+        w = a + (b - a) * t
+        weights[rarity] = w
+
+    return weights
+
+def monster_weight(day):
+    starting_day = 1
+    end_game = 100
+    t = (day - starting_day) / (end_game - starting_day)
+    t = max(0.0 , min(1.0, t))
+    start = {
+        1: 80,
+        2: 15,
+        3: 5,
+        4: 2,
+        5: 1,
+        6: 0.1,
+        7: 0.05,
+        8: 0.01,
+        9: 0.005,
+        10: 0.001,
+    }
+
+    end = {
+        1: 0.001,
+        2: 0.005,
+        3: 0.01,
+        4: 0.05,
+        5: 0.1,
+        6: 1,
+        7: 2,
+        8: 5,
+        9: 15,
+        10: 80,
     }
 
     weights ={}
