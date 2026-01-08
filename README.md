@@ -1,16 +1,33 @@
-# Text RPG (Python)
-A simple text-based RPG written in Python where you manage a party, fight enemies, rest to recover, and visit a village shop to upgrade your characters.
+# Dino's Adventure (Python Text RPG)
+
+A simple text-based, party-based RPG in Python: fight enemies, rest at the campfire, and visit a village shop to buy equipment as the days get harder. 
 
 ## Features
-- Party-based gameplay (multiple characters with their own gold and stats).
-- Turn-based combat loop (battle / rest / village).
-- Village shop with a rotating daily inventory.
-- Weighted rarity system: the shop can roll any rarity at any time, but higher rarities become more likely as in-game days progress (using `random.choices` weights).
+- Party-based gameplay: 3 characters with their own stats, gold, mana, inventory, equipment, XP, and levels.
+- Turn-based combat with:
+  - Dodge chance (based on agility).
+  - Critical hits for basic attacks and spells.
+  - Spells with mana costs (Fireball, Icequake).
+  - Items during combat (Potion healing).
+- Day progression system:
+  - Each main-menu action advances the day.
+  - Enemies scale up slightly with day count (HP/attack/defense/rewards).
+- Campfire rest: heals the party (if alive).
+- Village shop:
+  - Daily rotating selection (3 items).
+  - Weighted rarity system that shifts toward higher rarities as days increase.
+  - Buying items permanently increases stats (attack/defense/max HP) and records equipment owned.
+- Progression:
+  - Gold + XP rewards after battles.
+  - Level ups grant max HP and stat points.
+  - Spend stat points to upgrade max HP, attack, defense, agility, or intelligence.
+- Save/Load system:
+  - JSON save file (`savegame.json`) stores day + party data.
 
-## Tech / Structure
-- Pure Python (no external dependencies).
-- Data-driven items: shop items are stored as a list of dictionaries (name, rarity, stats, price).
-- Save system: game state can be stored and loaded (JSON-based).
-  
-## Notes
-This project is a learning-focused RPG prototype. Balance values, items, and rarity weights are expected to change over time.
+## Requirements
+- Python 3.x
+- `colorama` (used for colored combat output)
+
+Install:
+```bash
+pip install colorama
