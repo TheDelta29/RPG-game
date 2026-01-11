@@ -35,13 +35,13 @@ def calculate_damage(attacker, defender):
     base_damage = attacker["attack"] * (1 + (attacker.get("strength", 0) / 25 )) - defender["defense"]
     if base_damage <= 0:
         base_damage = 0
-    return max(1, base_damage)
+    return round(max(1, base_damage))
 
 
 def apply_damage(attacker, defender):
 
     if random.random() < dodge_chance(defender):
-        print(f"{defender['name']} has dodged the attack !")
+        print(f"{defender['name']} has",Style.BRIGHT,Fore.YELLOW,"dodged the attack !",Style.RESET_ALL)
         return 0
 
     damage = calculate_damage(attacker, defender)
@@ -61,7 +61,7 @@ def apply_damage(attacker, defender):
     defender["hp"] = defender["hp"] - damage
     if defender["hp"] <= 0:
         defender["hp"] = 0
-    return damage
+    return round(damage)
 
 def dodge_chance(player):
     agility = player.get("agility", 0)
@@ -124,7 +124,7 @@ def party_take_damage(party, attacker):
 
 def use_spell(player, spell):
     if player["mana"] < spell["mana_cost"]:
-        print("You don't have enough mana!")
+        print("You don't have enough",Style.BRIGHT,Fore.BLUE,"mana!",Style.RESET_ALL)
         return
     else:
         player["mana"] -= spell["mana_cost"]
@@ -148,7 +148,7 @@ def apply_spell_damage(spell, attacker, defender):
     defender["hp"] = defender["hp"] - damage
     if defender["hp"] <= 0:
         defender["hp"] = 0
-    return damage
+    return round(damage)
 
 def remove_dead(party):
     new_party=[]
@@ -221,6 +221,7 @@ def player_turn(attacker, defender):
                 print("=" * 60)
                 print(f"{attacker['name']} has run away from the battle!")
                 print("=" * 60)
+                return defender["hp"]
         if not is_alive(defender):
             print(f"{defender['name']} has fallen!")
     return defender["hp"]
@@ -263,10 +264,10 @@ def enemy_turn(enemy, party):
     if target is None:
         return None
     else:
-        dmg = apply_damage(enemy, target)
+        dmg = round(apply_damage(enemy, target))
         print("=" * 60)
-        print(f"{enemy["name"]} has dealt {dmg} damage to {target['name']}!")
-        print(f"{target['name']} : ", target["hp"],'/', target["max_hp"], "HP")
+        print(f"{enemy["name"]} has dealt",Style.BRIGHT,Fore.RED,f"{dmg}",Style.RESET_ALL,"damage to",Style.BRIGHT,Fore.GREEN,f"{target['name']}",Style.RESET_ALL,"!")
+        print(f"{target['name']} : ",Style.BRIGHT,Fore.RED,target["hp"],'/', target["max_hp"],Style.RESET_ALL,"HP")
         print("=" * 60)
 
     return target
@@ -282,7 +283,7 @@ def check_level_up(player):
         player["level"] += 1
         player["max_hp"] += 5
         player["stat_points"] += 3
-        print(f"{player['name']} has leveled up to Lv. {player['level']}!")
+        print(Style.BRIGHT,Fore.GREEN,f"{player['name']}",Style.RESET_ALL,f" has leveled up to Lv. {player['level']}!")
     return player
 
 def give_loot(party, enemy):
@@ -304,12 +305,12 @@ def give_loot(party, enemy):
 
             for player in alive_party:
                 player["gold"] += gold_per_player
-                print(f"{player['name']} received {gold_per_player} gold !")
+                print(Style.BRIGHT,Fore.GREEN,f"{player['name']}",Style.RESET_ALL,f"received {gold_per_player}",Style.BRIGHT,Fore.YELLOW,"gold",Style.RESET_ALL,"!")
                 player["xp"] += xp_reward
-                print(f"{player['name']} received {xp_reward} xp !")
+                print(Style.BRIGHT,Fore.GREEN,f"{player['name']}",Style.RESET_ALL,f"received {xp_reward} xp !")
                 check_level_up(player)
                 pause()
-            print(f"Total party gold : {sum(player["gold"] for player in party)}")
+            print("Total party gold :",Style.BRIGHT,Fore.YELLOW,f"{sum(player["gold"] for player in party)}",Style.RESET_ALL)
             return True
     else :
         return False
@@ -363,7 +364,7 @@ def boss_spawn_chance(day, start_chance=0.01, cap=0.25, ramp_days=40):
 def party_battle_flow(party, enemy):
     print("=" * 60)
     print(f"A wild {enemy["name"]} has appeared !")
-    print(f"It has {enemy["hp"]}/{enemy['max_hp']} HP !")
+    print("It has",Style.BRIGHT,Fore.RED,f"{enemy["hp"]}/{enemy['max_hp']}",Style.RESET_ALL,"HP !")
     print("=" * 60)
     battle(party, enemy)
     if party_is_alive(party):
@@ -397,16 +398,16 @@ def xp_to_level(level):
     return 50 * level
 
 def display_stat_page(player):
-    print(f"Name : {player['name']}")
-    print(f"Level : {player['level']}")
-    print(f"Experience : {player['xp']}/{xp_to_level(player['level'])}")
-    print(f"Health : {player['hp']}/{player['max_hp']}")
-    print(f"Strength : {player.get('strength', 0)}")
-    print(f"Defense : {player.get('defense', 0)}")
-    print(f"Agility : {player.get('agility', 0)}")
-    print(f"Intelligence : {player.get('intelligence', 0)}")
-    print(f"Mana : {player['mana']}/{player['max_mana']}")
-    print(f"Available Stat Points : {player['stat_points']}")
+    print("Name : ",Style.BRIGHT,Fore.WHITE,f"{player['name']}",Style.RESET_ALL)
+    print(f"Level : ",Style.BRIGHT,Fore.GREEN,f"{player['level']}",Style.RESET_ALL,)
+    print(f"Experience : ",Style.BRIGHT,Fore.GREEN,f"{player['xp']}/{xp_to_level(player['level'])}",Style.RESET_ALL,)
+    print(f"Health : ",Style.BRIGHT,Fore.RED,f"{player['hp']}/{player['max_hp']}",Style.RESET_ALL)
+    print(f"Strength : ",Style.BRIGHT,Fore.RED,f"{player.get('strength', 0)}",Style.RESET_ALL)
+    print(f"Defense : ",Style.BRIGHT,Fore.WHITE,f"{player.get('defense', 0)}",Style.RESET_ALL)
+    print(f"Agility : ",Style.BRIGHT,Fore.GREEN,f"{player.get('agility', 0)}",Style.RESET_ALL)
+    print(f"Intelligence : ",Style.BRIGHT,Fore.RED,f"{player.get('intelligence', 0)}",Style.RESET_ALL)
+    print(f"Mana : ",Style.BRIGHT,Fore.BLUE,f"{player['mana']}/{player['max_mana']}",Style.RESET_ALL)
+    print(f"Available Stat Points : ",Style.BRIGHT,Fore.GREEN,f"{player['stat_points']}",Style.RESET_ALL)
     return
 
 def spend_stat_points(player):
