@@ -24,6 +24,8 @@ crits = {int(k): v for k, v in crits_raw.items()}
 with open("data/spells.json", "r", encoding="utf-8") as f:
     spells = json.load(f)
 
+with open("data/bosses.json", "r", encoding="utf-8") as f:
+    bosses = json.load(f)
 
 ## ============================================================================
 ## PART 2: CORE BATTLE FUNCTIONS
@@ -33,7 +35,7 @@ def calculate_damage(attacker, defender):
     base_damage = attacker["attack"] * (1 + (attacker.get("strength", 0) / 25 )) - defender["defense"]
     if base_damage <= 0:
         base_damage = 0
-    return base_damage
+    return max(1, base_damage)
 
 
 def apply_damage(attacker, defender):
@@ -313,20 +315,34 @@ def give_loot(party, enemy):
         return False
 
 def choose_random_enemy(day):
+    if random.random() < boss_spawn_chance(day):
+        weights_by_diff = boss_weight(day)
+        diff = list(weights_by_diff.keys())
+        difficulty_weights = [weights_by_diff[t] for t in diff]
+        chosen_diff = random.choices(diff, weights=difficulty_weights, k=1)[0]
+
+        chosen_one = [b for b in bosses if b.get("difficulty", 0) == chosen_diff]
+        if not chosen_one:
+            chosen_one = bosses
+
+        boss = copy.deepcopy(random.choices(chosen_one, k=1)[0])
+        boss["is_boss"] = True
+        return scale_enemy(boss, day)
+
     weights_by_tier = monster_weight(day)
     tiers = list(weights_by_tier.keys())
     tier_weights = [weights_by_tier[t] for t in tiers]
     chosen_tier = random.choices(tiers, weights=tier_weights, k=1)[0]
 
-
     chosen = [e for e in enemies if e.get("tier", 0) == chosen_tier]
     if not chosen:
         chosen = enemies
 
-
     enemy=copy.deepcopy(random.choice(chosen))
 
+    return scale_enemy(enemy, day)
 
+def scale_enemy(enemy, day):
     hp_scale = 1.05 ** (day - 1 )
     stat_scale = 1.03 ** (day - 1 )
 
@@ -337,6 +353,12 @@ def choose_random_enemy(day):
     enemy["gold_reward"] = int(enemy["gold_reward"] * stat_scale)
     enemy["xp_reward"] = int(enemy["xp_reward"] * stat_scale)
     return enemy
+
+def boss_spawn_chance(day, start_chance=0.01, cap=0.25, ramp_days=40):
+    t = (day - 1) / ramp_days
+    t = max(0.0 , min(1.0, t))
+    chance = start_chance + (cap - start_chance) * t
+    return chance
 
 def party_battle_flow(party, enemy):
     print("=" * 60)
@@ -496,11 +518,52 @@ def monster_weight(day):
 
     weights ={}
 
-    for rarity in start:
-        a = start[rarity]
-        b = end[rarity]
+    for difficulty in start:
+        a = start[difficulty]
+        b = end[difficulty]
         w = a + (b - a) * t
-        weights[rarity] = w
+        weights[difficulty] = w
+
+    return weights
+
+def boss_weight(day):
+    starting_day = 1
+    end_game = 100
+    t = (day - starting_day) / (end_game - starting_day)
+    t = max(0.0 , min(1.0, t))
+    start = {
+        1: 80,
+        2: 15,
+        3: 5,
+        4: 2,
+        5: 1,
+        6: 0.1,
+        7: 0.05,
+        8: 0.01,
+        9: 0.005,
+        10: 0.001,
+    }
+
+    end = {
+        1: 0.001,
+        2: 0.005,
+        3: 0.01,
+        4: 0.05,
+        5: 0.1,
+        6: 1,
+        7: 2,
+        8: 5,
+        9: 15,
+        10: 80,
+    }
+
+    weights ={}
+
+    for difficulty in start:
+        a = start[difficulty]
+        b = end[difficulty]
+        w = a + (b - a) * t
+        weights[difficulty] = w
 
     return weights
 
@@ -702,7 +765,7 @@ def main():
             print("Thank you for playing!")
             break
         elif choice == "6":
-            sure = input("Are you sure you want to quit without saving? (y/n) : ")
+            sure = input("Are you sure you want to quit without saving? (y/n) : ").strip().lower()
             if sure == "y":
                 print("Thank you for playing!")
                 break
