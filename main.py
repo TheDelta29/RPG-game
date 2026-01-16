@@ -328,6 +328,7 @@ def choose_random_enemy(day):
 
         boss = copy.deepcopy(random.choices(chosen_one, k=1)[0])
         boss["is_boss"] = True
+        print("A boss has appeared! This enemy is much tougher than normal enemies.")
         return scale_enemy(boss, day)
 
     weights_by_tier = monster_weight(day)
