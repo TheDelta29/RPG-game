@@ -16,21 +16,55 @@ def mainloop():
     bg = pygame.image.load("data/images/dinosadventurebg.png").convert_alpha()
     bg = pygame.transform.scale(bg, (1280, 720))
 
-    #settings startbtn to the button image
+    #setting startbtn to the button image
     startbtn = pygame.image.load("data/images/startnewgamebtn.png").convert_alpha()
     startbtn = pygame.transform.scale(startbtn, (350, 100))
 
     loadbtn = pygame.image.load("data/images/loadgamebtn.png").convert_alpha()
-    loadbtn = pygame.transform.scale(loadbtn, (630, 190))
+    loadbtn = pygame.transform.scale(loadbtn, (300, 90))
+
+    quitbtn = pygame.image.load("data/images/quitbtn.png").convert_alpha()
+    quitbtn = pygame.transform.scale(quitbtn, (250, 75))
+
+    settingsbtn = pygame.image.load("data/images/settingsbtn.png").convert_alpha()
+    settingsbtn = pygame.transform.scale(settingsbtn, (90, 75))
 
     def draw_img(img, x ,y):
         screen.blit(img, (x, y))
 
-    def clicked():
-        pos = pygame.mouse.get_pos()
-        if pygame.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1:
-                return "clicked"
+    class Button:
+        def __init__(self, x, y, img, scale):
+            width = img.get_width()
+            height = img.get_height()
+            self.image = pygame.transform.scale(img, (int(width * scale), int(height * scale)))
+            self.rect = self.image.get_rect()
+            self.rect.topleft = (x, y)
+            self.clicked = False
+
+        def draw(self):
+
+            action = False
+
+            #get mouse position
+            pos = pygame.mouse.get_pos()
+
+            #check if the mouse is over the button
+            if self.rect.collidepoint(pos):
+                if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+                    self.clicked = True
+                    action = True
+            #if the mouse is not clicked, set the clicked variable to False
+            if pygame.mouse.get_pressed()[0] == 0:
+                self.clicked = False
+
+            screen.blit(self.image, (self.rect.x, self.rect.y))
+
+            return action
+
+    start_button =  Button(centerx - startbtn.get_width() / 2 , centery - startbtn.get_height() / 0.9, startbtn, 1)
+    load_button = Button(centerx - loadbtn.get_width() / 2 , centery + startbtn.get_height() / 2.2, loadbtn, 1)
+    quit_button = Button (centerx - quitbtn.get_width() / 2 , centery + startbtn.get_height() * 2.4, quitbtn, 1)
+    settings_button = Button(screen.get_width() - settingsbtn.get_width() - 10, 10, settingsbtn, 1)
 
 
     font = pygame.font.SysFont("arialblack", 40)
@@ -50,18 +84,19 @@ def mainloop():
 
         screen.fill("black")
         screen.blit(bg, (0, 0))
-        draw_img(startbtn, centerx - startbtn.get_width() / 2 , centery - startbtn.get_height() / 0.9)
-        draw_img(loadbtn, centerx - loadbtn.get_width() / 2 , centery + startbtn.get_height() / 2.2)
 
-        #clicked()
-
-        #draw_text("Welcome to Dino's Adventure", font, textcolor, 250, 250)
+        if start_button.draw():
+            print("start")
+        if load_button.draw():
+            print("load")
+        if quit_button.draw():
+            print("quit")
+        if settings_button.draw():
+            print("settings")
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
-        #pygame.draw.rect(screen, "white", pygame.Rect(600, 360, 200, 50), 2, 5)
 
         pygame.display.flip()
         pygame.display.update()
