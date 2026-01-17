@@ -6,7 +6,7 @@ import random
 import copy
 import json
 from colorama import *
-from UI.pygametesting import mainloop
+from UI.mainmenu import mainloop
 
 
 with open("data/enemies.json", "r", encoding="utf-8") as f:
