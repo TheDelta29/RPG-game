@@ -6,6 +6,8 @@ import random
 import copy
 import json
 from colorama import *
+from UI.pygametesting import mainloop
+
 
 with open("data/enemies.json", "r", encoding="utf-8") as f:
     enemies = json.load(f)
@@ -800,4 +802,4 @@ def load_game():
         return None, None
 
 if __name__ == "__main__":
-    main()
+    mainloop()
