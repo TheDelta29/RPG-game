@@ -6,7 +6,6 @@ import random
 import copy
 import json
 from colorama import *
-from UI.mainmenu import mainloop
 
 
 with open("data/enemies.json", "r", encoding="utf-8") as f:
@@ -311,7 +310,7 @@ def give_loot(party, enemy):
                 player["xp"] += xp_reward
                 print(Style.BRIGHT,Fore.GREEN,f"{player['name']}",Style.RESET_ALL,f"received {xp_reward} xp !")
                 check_level_up(player)
-                pause()
+                #pause()
             print("Total party gold :",Style.BRIGHT,Fore.YELLOW,f"{sum(player["gold"] for player in party)}",Style.RESET_ALL)
             return True
     else :
@@ -800,6 +799,3 @@ def load_game():
     except FileNotFoundError:
         print("No save file found. Starting a new game.")
         return None, None
-
-if __name__ == "__main__":
-    mainloop()
