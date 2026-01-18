@@ -6,16 +6,16 @@ def mainloop():
 
     pygame.init()
 
-    #screen size
+    # screen size
     screen = pygame.display.set_mode((1280, 720))
 
     centerx , centery = screen.get_rect().centerx , screen.get_rect().centery
 
-    #setting the variable bg to the background image
-    bg = pygame.image.load("data/images/dinosadventurebg.png").convert_alpha()
+    # setting the variable bg to the background image
+    bg = pygame.image.load("data/images/backgrounds/dinosadventurebg.png").convert_alpha()
     bg = pygame.transform.scale(bg, (1280, 720))
 
-    #setting startbtn to the button image
+    # setting startbtn to the button image
     startbtn = pygame.image.load("data/images/buttons/startnewgamebtn.png").convert_alpha()
     startbtn = pygame.transform.scale(startbtn, (350, 100))
 
@@ -38,19 +38,19 @@ def mainloop():
     videosettingsbtn = pygame.transform.scale(videosettingsbtn, (300, 90))
 
 
-    #main menu buttons
+    # main menu buttons
     start_button =  button.Button(centerx - startbtn.get_width() / 2 , centery - startbtn.get_height() / 0.9, startbtn, 1)
     load_button = button.Button(centerx - loadbtn.get_width() / 2 , centery + startbtn.get_height() / 5, loadbtn, 1)
     quit_button = button.Button (centerx - quitbtn.get_width() / 2 , centery + startbtn.get_height() / 0.5 , quitbtn, 1)
     settings_button = button.Button(screen.get_width() - settingsbtn.get_width() - 10, 10, settingsbtn, 1)
 
-    #settings menu buttons
+    # settings menu buttons
     videosettingsbtn = button.Button(centerx - videosettingsbtn.get_width() / 2, centery - startbtn.get_height() / 0.9,videosettingsbtn, 1)
     audiosettingsbtn = button.Button(centerx - audiosettingsbtn.get_width() / 2, centery + startbtn.get_height() / 5 ,audiosettingsbtn, 1)
     back_button = button.Button(centerx - backbtn.get_width() / 2 , centery + startbtn.get_height() / 0.5, backbtn, 1)
 
 
-    #settings variable
+    # settings variable
     settingsmenu = False
 
     font = pygame.font.SysFont("arialblack", 40)
@@ -90,7 +90,6 @@ def mainloop():
             load_button.active = True
             quit_button.active = True
             if settings_button.draw(screen):
-                print("settings")
                 settingsmenu = True
 
             if start_button.draw(screen):
