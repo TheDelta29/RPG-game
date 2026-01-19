@@ -13,26 +13,29 @@ class MenuState:
         bg = pygame.image.load("data/images/backgrounds/dinosadventurebg.png").convert_alpha()
         self.bg = pygame.transform.scale(bg, (screen_width, screen_height))
 
+        gamelogo = pygame.image.load("data/images/gamelogo.png").convert_alpha()
+        pygame.display.set_icon(gamelogo)
+
         # setting startbtn to the button image
-        startbtn = pygame.image.load("data/images/buttons/startnewgamebtn.png").convert_alpha()
+        startbtn = pygame.image.load("data/images/buttons/mainmenu/startnewgamebtn.png").convert_alpha()
         startbtn = pygame.transform.scale(startbtn, (350, 100))
 
-        loadbtn = pygame.image.load("data/images/buttons/loadgamebtn.png").convert_alpha()
+        loadbtn = pygame.image.load("data/images/buttons/mainmenu/loadgamebtn.png").convert_alpha()
         loadbtn = pygame.transform.scale(loadbtn, (300, 90))
 
-        quitbtn = pygame.image.load("data/images/buttons/quitbtn.png").convert_alpha()
+        quitbtn = pygame.image.load("data/images/buttons/mainmenu/quitbtn.png").convert_alpha()
         quitbtn = pygame.transform.scale(quitbtn, (250, 75))
 
-        settingsbtn = pygame.image.load("data/images/buttons/settingsbtn.png").convert_alpha()
+        settingsbtn = pygame.image.load("data/images/buttons/mainmenu/settingsbtn.png").convert_alpha()
         settingsbtn = pygame.transform.scale(settingsbtn, (90, 75))
 
-        backbtn = pygame.image.load("data/images/buttons/backbtn.png").convert_alpha()
+        backbtn = pygame.image.load("data/images/buttons/mainmenu/backbtn.png").convert_alpha()
         backbtn = pygame.transform.scale(backbtn, (250, 75))
 
-        audiosettingsbtn = pygame.image.load("data/images/buttons/audiosettingsbtn.png").convert_alpha()
+        audiosettingsbtn = pygame.image.load("data/images/buttons/mainmenu/audiosettingsbtn.png").convert_alpha()
         audiosettingsbtn = pygame.transform.scale(audiosettingsbtn, (300, 90))
 
-        videosettingsbtn = pygame.image.load("data/images/buttons/videosettingsbtn.png").convert_alpha()
+        videosettingsbtn = pygame.image.load("data/images/buttons/mainmenu/videosettingsbtn.png").convert_alpha()
         videosettingsbtn = pygame.transform.scale(videosettingsbtn, (300, 90))
 
         # main menu buttons
