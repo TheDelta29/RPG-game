@@ -1,5 +1,6 @@
 import pygame
 import copy
+import os
 from .menustate import MenuState
 from .overworldstate import OverworldState
 from main import party_template
@@ -10,10 +11,22 @@ def mainloop():
 
     pygame.init()
 
+    current_dir = os.path.dirname(__file__)
+
     # screen size
     screen = pygame.display.set_mode((1280, 720))
     pygame.display.set_caption("Dino's Adventure")
     clock = pygame.time.Clock()
+
+    # music
+
+    MusicDir = os.path.join(current_dir, "..", "data", "music", "mainsong.mp3")
+    if os.path.exists(MusicDir):
+        pygame.mixer.music.load(MusicDir)
+        pygame.mixer.music.play(-1, 300, 3000)
+        pygame.mixer.music.set_volume(0.1)
+    else:
+        print("No music found.")
 
     current_state = "menu"
     running = True
