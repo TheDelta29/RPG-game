@@ -11,6 +11,8 @@ class OverworldState:
         self.centerx = screen_width/2
         self.centery = screen_height/2
 
+        pygame.mixer.music.fadeout(1500)
+
         self.font = pygame.font.SysFont("arialblack", 40)
         self.small_font = pygame.font.SysFont("arialblack", 24)
         self.text_color = (255, 255, 255)
@@ -18,24 +20,24 @@ class OverworldState:
         self.bg = pygame.transform.scale(bg, (screen_width, screen_height))
 
         battlebutton = pygame.image.load("data/images/buttons/overworld/battlebutton.png").convert_alpha()
-        battlebutton = pygame.transform.scale(battlebutton, (650, 200))
+        battlebutton = pygame.transform.scale(battlebutton, (300, 90))
         campfirebutton = pygame.image.load("data/images/buttons/overworld/campfirebutton.png").convert_alpha()
-        campfirebutton = pygame.transform.scale(campfirebutton, (650, 200))
+        campfirebutton = pygame.transform.scale(campfirebutton, (300, 90))
         villagebutton = pygame.image.load("data/images/buttons/overworld/villagebutton.png").convert_alpha()
-        villagebutton = pygame.transform.scale(villagebutton, (650, 200))
+        villagebutton = pygame.transform.scale(villagebutton, (300, 90))
         statsbutton = pygame.image.load("data/images/buttons/overworld/playerstatpagebutton.png").convert_alpha()
-        statsbutton = pygame.transform.scale(statsbutton, (650, 200))
+        statsbutton = pygame.transform.scale(statsbutton, (300, 90))
         savebutton = pygame.image.load("data/images/buttons/overworld/saveandquitbutton.png").convert_alpha()
-        savebutton = pygame.transform.scale(savebutton, (650, 200))
+        savebutton = pygame.transform.scale(savebutton, (300, 90))
         quitwithoutsavingbutton = pygame.image.load("data/images/buttons/overworld/quitwithoutsavingbutton.png").convert_alpha()
-        quitwithoutsavingbutton = pygame.transform.scale(quitwithoutsavingbutton, (650, 200))
+        quitwithoutsavingbutton = pygame.transform.scale(quitwithoutsavingbutton, (300, 90))
 
-        self.battlebutton = button.Button(-50,0, battlebutton, 1)
-        self.campfirebutton = button.Button(-50, 100, campfirebutton, 1)
-        self.villagebutton = button.Button(-50, 200, villagebutton, 1)
-        self.statsbutton = button.Button(-50, 300, statsbutton, 1)
-        self.savebutton = button.Button(-50, 400, savebutton, 1)
-        self.quitwithoutsavingbutton = button.Button(-50, 500, quitwithoutsavingbutton, 1)
+        self.battlebutton = button.Button(100,50, battlebutton, 1)
+        self.campfirebutton = button.Button(100, 150, campfirebutton, 1)
+        self.villagebutton = button.Button(100, 250, villagebutton, 1)
+        self.statsbutton = button.Button(100, 350, statsbutton, 1)
+        self.savebutton = button.Button(100, 450, savebutton, 1)
+        self.quitwithoutsavingbutton = button.Button(100, 550, quitwithoutsavingbutton, 1)
 
         self.message_log = []
 
@@ -46,8 +48,7 @@ class OverworldState:
             enemy = choose_random_enemy(self.day)
             return("switch_to_battle", enemy)
         if self.campfirebutton.rect.collidepoint(event.pos):
-            rest_at_campfire(self.party)
-            return None
+            return("switch", "campfire")
         if self.villagebutton.rect.collidepoint(event.pos):
             return("switch","village")
         if self.statsbutton.rect.collidepoint(event.pos):

@@ -1,10 +1,13 @@
 import pygame
 import copy
 import os
+
+from .campfirestate import CampfireState
 from .menustate import MenuState
 from .overworldstate import OverworldState
 from main import party_template
 from typing import Any
+
 
 
 def mainloop():
@@ -21,17 +24,19 @@ def mainloop():
     # music
 
     MusicDir = os.path.join(current_dir, "..", "data", "music", "mainsong.mp3")
-    if os.path.exists(MusicDir):
-        pygame.mixer.music.load(MusicDir)
-        pygame.mixer.music.play(-1, 300, 3000)
-        pygame.mixer.music.set_volume(0.1)
-    else:
-        print("No music found.")
+
 
     current_state = "menu"
     running = True
     party = None
     day = 1
+    if current_state == "menu":
+        if os.path.exists(MusicDir):
+            pygame.mixer.music.load(MusicDir)
+            pygame.mixer.music.play(-1, 300, 3000)
+            pygame.mixer.music.set_volume(0.1)
+        else:
+            print("No music found.")
 
     states: dict[str, Any] = {
         "menu": MenuState(),
@@ -54,7 +59,10 @@ def mainloop():
                 current_state = "overworld"
             elif target == "menu":
                 current_state = "menu"
-
+            elif target == "campfire":
+                states["campfire"] = CampfireState(party, day, 1280, 720)
+                current_state = "campfire"
+                day += 1
             elif target == "load_overworld":
 
                 if party is None:

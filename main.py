@@ -380,18 +380,18 @@ def party_battle_flow(party, enemy):
 def rest_at_campfire(party):
     remove_dead(party)
     if party_is_alive(party):
-        heal_amount = 30
         for player in party:
+            heal_amount = player["max_hp"] * 0.3
             print("=" * 60)
             print(f"{player['name']} has {player['hp']} HP")
             print(f"{player['name']} has healed {heal_amount} HP!")
-            pause()
+            #pause()
             player["hp"] += heal_amount
             if player["hp"] > player["max_hp"]:
                 player["hp"] = player["max_hp"]
             print(f"{player['name']} : ", player["hp"],'/', player["max_hp"], "HP")
             print("=" * 60)
-            pause()
+            #pause()
 
 def spell_check(player, spell):
     return player if player["mana"] >= spell["mana_cost"] else False
