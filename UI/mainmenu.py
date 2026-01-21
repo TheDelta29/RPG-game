@@ -5,6 +5,7 @@ import os
 from .campfirestate import CampfireState
 from .menustate import MenuState
 from .overworldstate import OverworldState
+from .endofbattlestate import EndOfBattleState
 from main import party_template
 from typing import Any
 
@@ -79,7 +80,7 @@ def mainloop():
             target_state = target
             if target_state == "victory":
                 day += 1
-                states["overworld"] = OverworldState(party, day, 1280, 720)
+                states["end_of_battle"] = EndOfBattleState(party, day, 1280, 720)
                 current_state = "overworld"
             else:
                 party = None
