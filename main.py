@@ -58,6 +58,10 @@ def apply_damage(attacker, defender):
         print(text)
         # pause()
         damage *= 2
+    print("=" * 60)
+    print(Fore.GREEN, Style.BRIGHT, f"{attacker['name']}", Style.RESET_ALL, "has dealt", Fore.RED, Style.BRIGHT,round(damage), Style.RESET_ALL, f"damage to {defender['name']}")
+    print(Fore.RED, Style.BRIGHT, f"{defender['name']}", Style.RESET_ALL, ":", Fore.RED, Style.BRIGHT,round(defender["hp"]), '/', round(defender["max_hp"]), Style.RESET_ALL, "HP")
+    print("=" * 60)
 
     defender["hp"] = defender["hp"] - damage
     if defender["hp"] <= 0:

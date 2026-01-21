@@ -21,6 +21,7 @@ class BattleState:
         self.screen_height = screen_height
 
         self.actor_i = 0
+        self.round_number = 1
         self.phase = "CHOOSE_ACTION"
         self.message_log = []
         self.waiting_for_confirm = False
@@ -120,12 +121,18 @@ class BattleState:
         self.waiting_for_confirm = True
 
     def advance_turn(self):
-        if is_alive(self.enemy):
-            enemy_turn(self.enemy, self.party)
-
         self.actor_i += 1
         if self.actor_i >= len(self.party):
             self.actor_i = 0
+            if is_alive(self.enemy) and party_is_alive(self.party):
+                enemy_turn(self.enemy, self.party)
+
+        while not is_alive(self.party[self.actor_i]):
+            self.actor_i += 1
+            if self.actor_i >= len(self.party):
+                self.actor_i = 0
+                if is_alive(self.enemy) and party_is_alive(self.party):
+                    enemy_turn(self.enemy, self.party)
 
         self.phase = "CHOOSE_ACTION"
 
