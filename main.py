@@ -56,7 +56,7 @@ def apply_damage(attacker, defender):
     if layers > 0:
         text = crits.get(layers, f"{layers}x critical hit!")
         print(text)
-        pause()
+        # pause()
         damage *= 2
 
     defender["hp"] = defender["hp"] - damage
@@ -144,7 +144,7 @@ def apply_spell_damage(spell, attacker, defender):
     if layers > 0:
         text = crits.get(layers, f"{layers}x critical hit!")
         print(text)
-        pause()
+        # pause()
         damage *= 2
 
     defender["hp"] = defender["hp"] - damage
