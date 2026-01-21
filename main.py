@@ -99,7 +99,8 @@ def count_item(player, item_name):
             counter+=1
     return counter
 
-def use_potion(player, heal_amount):
+def use_potion(player):
+    heal_amount = player["max_hp"] * 0.3
     if player["inventory"].get('potion', 0) > 0:
         player["hp"] += heal_amount
         if player["hp"] > player["max_hp"]:
@@ -196,26 +197,22 @@ def player_turn(attacker, defender):
                 print(Fore.GREEN,Style.BRIGHT,f"{attacker['name']}",Style.RESET_ALL, "has cast Icequake and dealt",Fore.RED,Style.BRIGHT,round(dmg),Style.RESET_ALL, f"damage to {defender['name']}")
                 print(Fore.GREEN,Style.BRIGHT, f"{defender['name']}", Style.RESET_ALL, ":", Fore.RED, Style.BRIGHT,round(defender["hp"]), '/', round(defender["max_hp"]), Style.RESET_ALL, "HP")
                 print("=" * 60)
-            elif choice2 == "3" :
-                return
         elif choice == "3" :
-            print("1) Potion | Heal amount : 30")
+            print("1) Potion | Heal amount : 30%")
             print("2) Back")
             choice3 = input("Which item do you want to use ? ")
             if choice3 == "1" :
                 if attacker["hp"] == attacker["max_hp"]:
                     print("You are already at full health!")
-                    return
+                    return None
                 elif "potion" in attacker["inventory"]:
-                    use_potion(attacker, 30)
+                    use_potion(attacker)
                     print("=" * 60)
                     print(Fore.GREEN,Style.BRIGHT,f"{attacker['name']}",Style.RESET_ALL,"has used a potion and healed for",Fore.GREEN,Style.BRIGHT,"30",Style.RESET_ALL,"HP!")
                     print("=" * 60)
                 else:
                     print("You don't have a potion!")
-                    return
-            elif choice3 == "2" :
-                return
+                    return None
         elif choice == "4" :
             ans = input("Are you sure you want to try to run away ? y/n")
             if ans == 'y':

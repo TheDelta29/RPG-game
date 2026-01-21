@@ -81,7 +81,7 @@ def mainloop():
             if target_state == "victory":
                 day += 1
                 states["end_of_battle"] = EndOfBattleState(party, day, 1280, 720)
-                current_state = "overworld"
+                current_state = "end_of_battle"
             else:
                 party = None
                 day = 1
