@@ -135,7 +135,7 @@ class BattleState:
 
         if self.enemy["hp"] <= 0:
             self.log(f"{self.enemy["name"]} has been defeated !")
-            give_loot(self.party, self.enemy)
+            # give_loot(self.party, self.enemy)
             for player in self.party:
                 player["mana"] = player["max_mana"]
             self.battle_over = True

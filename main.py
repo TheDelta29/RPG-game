@@ -309,7 +309,7 @@ def give_loot(party, enemy):
                 check_level_up(player)
                 #pause()
             print("Total party gold :",Style.BRIGHT,Fore.YELLOW,f"{sum(player["gold"] for player in party)}",Style.RESET_ALL)
-            return True
+            return gold_per_player,xp_reward
     else :
         return False
 
