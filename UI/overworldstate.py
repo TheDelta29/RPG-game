@@ -56,7 +56,7 @@ class OverworldState:
         if self.savebutton.rect.collidepoint(event.pos):
             save_game(self.day, self.party)
             self.message_log.append("Game saved!")
-            return None
+            return("switch", "menu")
         if self.quitwithoutsavingbutton.rect.collidepoint(event.pos):
             return("switch", "menu")
 

@@ -64,7 +64,8 @@ def mainloop():
                 current_state = "campfire"
                 day += 1
             elif target == "load_overworld":
-
+                from main import load_game
+                day, party = load_game()
                 if party is None:
                     party = copy.deepcopy(party_template)
                     day = 1
