@@ -675,6 +675,7 @@ def visit_village(party, day):
     return
 
 
+
 def main():
 
     global party

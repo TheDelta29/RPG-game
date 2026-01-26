@@ -5,6 +5,7 @@ import os
 from .campfirestate import CampfireState
 from .menustate import MenuState
 from .overworldstate import OverworldState
+from .choosecharacterstatpagestate import ChooseCharacterStatPageState
 from main import party_template
 from typing import Any
 
@@ -63,6 +64,9 @@ def mainloop():
                 states["campfire"] = CampfireState(party, day, 1280, 720)
                 current_state = "campfire"
                 day += 1
+            elif target == "stats":
+                states["stats"] = ChooseCharacterStatPageState(party, 1280, 720)
+                current_state = "stats"
             elif target == "load_overworld":
                 from main import load_game
                 day, party = load_game()
